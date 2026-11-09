@@ -17,8 +17,13 @@ npm run preview
 ## 修改内容
 
 - src/data/posts.js：文章内容与分类
+- src/data/site.js：登机口（栏目）名称、说明和配色
 - src/pages/index.astro：首页
-- src/layouts/Layout.astro：导航、页脚、全站样式
+- src/layouts/Layout.astro：导航、页脚
+- src/styles/global.css：配色、字体等全站样式
+- src/components/Loader.astro：loading page（每次会话只播放一次，地址加 ?loader 可重看）
+- src/components/AirfieldChart.astro：首页机场导览图
+- src/components/PosterArt.astro：三张栏目海报
 - src/pages/subscriptions.astro：订阅工具
 
 当前文章均为示例。订阅工具仅生成客户端导入入口，不提供格式转换或服务器代理。

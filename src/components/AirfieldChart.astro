@@ -1,0 +1,139 @@
+---
+// 全站导览图：每个停机位都是真实链接。滑行路线经过所有停机位，飞机沿路线移动。
+const ROUTE = 'M200 631V365Q200 305 260 305H320V246V305H480V246V305H640V246V305H735Q795 305 795 352V372';
+const stands = [
+  { key: 'A', label: '机场推荐', href: '/category/airports/', x: 320, y: 228, ly: 186 },
+  { key: 'V', label: 'VPS', href: '/category/vps/', x: 480, y: 228, ly: 186 },
+  { key: 'Y', label: '一元机场', href: '/category/budget/', x: 640, y: 228, ly: 186 },
+  { key: 'S', label: '订阅工具', href: '/subscriptions/', x: 795, y: 372, ly: 352, side: true },
+];
+---
+<svg class="chart" id="chart" viewBox="0 0 900 860" role="group" aria-label="站内导览图：机场推荐、VPS、一元机场、订阅工具">
+  <defs>
+    <pattern id="chart-grid" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M60 0H0V60" fill="none" stroke="#111" stroke-opacity=".13"/></pattern>
+  </defs>
+  <rect width="900" height="860" fill="url(#chart-grid)"/>
+
+  <g class="ch-runway" transform="translate(450 565) rotate(-14.8)">
+    <rect x="-372" y="-58" width="1012" height="116" fill="#111"/>
+    <path d="M-225 0H380" stroke="#f3f2ee" stroke-width="5" stroke-dasharray="44 30"/>
+    <g fill="#f3f2ee">
+      {Array.from({ length: 6 }, (_, i) => <rect x="-358" y={-46 + i * 16} width="42" height="9"/>)}
+      {Array.from({ length: 6 }, (_, i) => <rect x="430" y={-46 + i * 16} width="42" height="9"/>)}
+    </g>
+    <text x="-286" y="0" transform="rotate(90 -286 0)" text-anchor="middle" dy="17" class="ch-num">09</text>
+    <text x="392" y="0" transform="rotate(-90 392 0)" text-anchor="middle" dy="17" class="ch-num">27</text>
+  </g>
+
+  <rect x="250" y="62" width="510" height="84" fill="#111"/>
+  <text x="274" y="115" class="ch-term">航站楼</text>
+  <text x="736" y="113" text-anchor="end" class="ch-small ch-small--y">TERMINAL 01</text>
+
+  <path d={ROUTE} class="ch-pave"/>
+  <path d={ROUTE} class="ch-line" id="chart-route"/>
+
+  <g class="ch-tower" transform="translate(120 190)">
+    <circle r="36" fill="#D7141A"/>
+    <text text-anchor="middle" dy="14" class="ch-tower-t">巡</text>
+  </g>
+  <text x="120" y="256" text-anchor="middle" class="ch-small">TOWER</text>
+
+  <g id="chart-plane" class="ch-plane" transform="translate(200 631) rotate(-90)">
+    <path d="M30 0C30-3 24-4 18-4H6L-6-24h-7l7 20h-14l-6-8h-5l3 12-3 12h5l6-8H-6l-7 20h7L6 4h12c6 0 12-1 12-4Z" fill="#1E45D8" stroke="#FFC700" stroke-width="2.5" paint-order="stroke"/>
+  </g>
+
+  {stands.map((s) => (
+    <a href={s.href} class="ch-stand" data-x={s.x} data-y={s.y} aria-label={`前往${s.label}`}>
+      <rect x={s.side ? s.x - 170 : s.x - 72} y={s.side ? s.y - 34 : s.ly - 26} width={s.side ? 205 : 144} height={s.side ? 68 : 108} fill="transparent"/>
+      <rect class="ch-key" x={s.x - 30} y={s.y - 30} width="60" height="60"/>
+      <text class="ch-letter" x={s.x} y={s.y + 15} text-anchor="middle">{s.key}</text>
+      <text class="ch-label" x={s.side ? s.x - 42 : s.x} y={s.side ? s.y + 10 : s.ly} text-anchor={s.side ? 'end' : 'middle'}>{s.label}</text>
+    </a>
+  ))}
+
+  <g transform="translate(828 92)" class="ch-north"><path d="M0-30 13 22 0 12-13 22Z" fill="#111"/><text y="46" text-anchor="middle" class="ch-small">N</text></g>
+  <g transform="translate(540 770)"><path d="M0 0H240M0-8V8M120-8V8M240-8V8" stroke="#111" stroke-width="3" fill="none"/><text y="34" class="ch-small">AERODROME CHART · 站内导览图</text></g>
+</svg>
+
+<style is:global>
+  .ch-pave{fill:none;stroke:#111;stroke-width:40;stroke-linejoin:round;stroke-linecap:butt}
+  .ch-line{fill:none;stroke:#FFC700;stroke-width:4;stroke-dasharray:18 14}
+  .ch-num{font:800 50px var(--display);fill:#f3f2ee}
+  .ch-term{font:900 40px var(--display);fill:#FFC700}
+  .ch-small{font:500 17px var(--mono);letter-spacing:.06em;fill:#111}
+  .ch-small--y{fill:#FFC700}
+  .ch-tower-t{font:900 38px var(--display);fill:#fff}
+  .ch-key{fill:#111;stroke:#FFC700;stroke-width:4;paint-order:stroke;transition:fill .15s}
+  .ch-letter{font:800 46px var(--display);fill:#FFC700;transition:fill .15s;pointer-events:none}
+  .ch-label{font:900 29px var(--display);fill:#111}
+  .ch-stand{cursor:pointer}
+  .ch-stand:hover .ch-key,.ch-stand:focus-visible .ch-key{fill:#1E45D8}
+  .ch-stand:hover .ch-letter,.ch-stand:focus-visible .ch-letter{fill:#fff}
+  .ch-stand:hover .ch-label,.ch-stand:focus-visible .ch-label{fill:#1E45D8}
+  .ch-stand:focus-visible{outline:none}
+</style>
+
+<script>
+  const chart = document.getElementById('chart');
+  const route = document.getElementById('chart-route');
+  const plane = document.getElementById('chart-plane');
+  if (chart && route && plane) {
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const total = route.getTotalLength();
+    const at = (x, y) => {
+      let best = 0, bestD = Infinity;
+      for (let l = 0; l <= total; l += 4) {
+        const p = route.getPointAtLength(l);
+        const d = (p.x - x) ** 2 + (p.y - y) ** 2;
+        if (d < bestD) { bestD = d; best = l; }
+      }
+      return best;
+    };
+    let pos = 0, dir = 1, angle = -90, target = null, last = 0, visible = true;
+
+    const place = () => {
+      const p = route.getPointAtLength(pos);
+      const q = route.getPointAtLength(Math.min(total, Math.max(0, pos + dir * 2)));
+      if (q.x !== p.x || q.y !== p.y) {
+        const want = (Math.atan2(q.y - p.y, q.x - p.x) * 180) / Math.PI;
+        const diff = ((want - angle + 540) % 360) - 180;
+        angle += diff * (calm ? 1 : 0.16);
+      }
+      plane.setAttribute('transform', `translate(${p.x} ${p.y}) rotate(${angle})`);
+    };
+
+    const frame = (now) => {
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+      if (visible) {
+        if (target !== null) {
+          const gap = target - pos;
+          if (Math.abs(gap) > 2) {
+            dir = Math.sign(gap);
+            pos += dir * Math.min(Math.abs(gap), 520 * dt);
+          }
+        } else {
+          pos += dir * 54 * dt;
+          if (pos >= total) { pos = total; dir = -1; }
+          if (pos <= 0) { pos = 0; dir = 1; }
+        }
+        place();
+      }
+      requestAnimationFrame(frame);
+    };
+
+    chart.querySelectorAll('.ch-stand').forEach((stand) => {
+      const l = at(+stand.dataset.x, +stand.dataset.y);
+      const go = () => { target = l; if (calm) { pos = l; place(); } };
+      const leave = () => { target = null; };
+      stand.addEventListener('mouseenter', go);
+      stand.addEventListener('focus', go);
+      stand.addEventListener('mouseleave', leave);
+      stand.addEventListener('blur', leave);
+    });
+
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(chart);
+    place();
+    if (!calm) requestAnimationFrame((t) => { last = t; frame(t); });
+  }
+</script>

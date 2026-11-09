@@ -1,4 +1,43 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { gates } from '../data/site';
 ---
-<Layout title="关于本站"><article class="page"><p class="eyebrow">ABOUT / 关于</p><h1>保持观察，认真记录。</h1><p>这里是机场巡查博客，域名为 jichangxuncha.blog。本站将围绕机场推荐、VPS、一元机场与第三方订阅使用方法持续更新。</p><p>目前处于框架搭建阶段。文中示例用于展示栏目结构，后续会逐步补充真实评测、测试环境和更新时间。</p></article></Layout>
+<Layout title="关于本站">
+  <article class="about">
+    <div class="about-head">
+      <p class="mono">ABOUT / 关于</p>
+      <h1 class="big">保持观察，<br/>认真记录。</h1>
+    </div>
+    <div class="about-grid">
+      <svg class="tower" viewBox="0 0 300 420" aria-hidden="true">
+        <path d="M150 0v50" stroke="#111" stroke-width="7"/>
+        <path d="M40 48h220l-32 84H72Z" fill="#111"/>
+        <path d="M66 66h36l8 46H80ZM114 66h32v46h-28ZM156 66h32l-6 46h-28ZM200 66h36l-16 46h-30Z" fill="#FFC700"/>
+        <path d="M100 132h100l14 288H86Z" fill="#111"/>
+        <path d="M124 170h52M122 214h56M120 258h60M118 302h64M116 346h68" stroke="#FFC700" stroke-width="6"/>
+      </svg>
+      <div class="about-copy">
+        <p>这里是机场巡查博客，域名为 jichangxuncha.blog。本站将围绕机场推荐、VPS、一元机场与第三方订阅使用方法持续更新。</p>
+        <p>目前处于框架搭建阶段。文中示例用于展示栏目结构，后续会逐步补充真实评测、测试环境和更新时间。</p>
+        <ul>
+          {gates.map((g) => <li><a href={`/category/${g.slug}/`}><b>{g.key}</b>{g.category}<i aria-hidden="true">→</i></a></li>)}
+        </ul>
+      </div>
+    </div>
+  </article>
+</Layout>
+<style>
+  .about{background:var(--signal);min-height:calc(100svh - 60px);padding:clamp(28px,4vw,56px) var(--gutter) 0;overflow:hidden}
+  .about-head .mono{margin-bottom:12px}
+  .about h1{font-size:clamp(52px,10.5vw,190px)}
+  .about-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,5vw,80px);align-items:end;margin-top:clamp(20px,4vw,60px)}
+  .tower{display:block;width:min(100%,340px);margin-bottom:-2px;margin-left:clamp(0px,6vw,90px)}
+  .about-copy{padding-bottom:clamp(32px,5vw,72px)}
+  .about-copy p{font-size:clamp(17px,1.7vw,21px);font-weight:600;line-height:1.85;margin-bottom:1em;max-width:32em}
+  .about-copy ul{border-top:3px solid var(--ink);margin-top:28px}
+  .about-copy a{display:flex;align-items:center;gap:14px;min-height:60px;border-bottom:3px solid var(--ink);font:900 24px/1 var(--display);transition:padding .18s}
+  .about-copy a:hover{padding-left:12px}
+  .about-copy b{display:grid;place-items:center;width:36px;height:36px;background:var(--ink);color:var(--signal);font-weight:800}
+  .about-copy i{margin-left:auto;font-style:normal}
+  @media(max-width:760px){.about-grid{grid-template-columns:1fr}.tower{order:2;width:200px;margin:0 auto -2px}}
+</style>
