@@ -1,0 +1,7 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import {posts} from '../../data/posts';
+export function getStaticPaths(){return [{slug:'airports',name:'机场推荐'},{slug:'vps',name:'VPS'},{slug:'budget',name:'一元机场'}].map(x=>({params:{slug:x.slug},props:{name:x.name}}))}
+const {name}=Astro.props;
+---
+<Layout title={name}><section class="page"><p class="eyebrow">FIELD NOTES / 分类笔记</p><h1>{name}</h1><p>按主题整理的选购思路、体验记录与使用笔记。</p>{posts.filter(p=>p.category===name).map(p=><a class="tool" style="display:block" href={`/posts/${p.slug}/`}><span class="tag">示例文章 · {p.date}</span><h2 style="margin-top:15px">{p.title}</h2><p>{p.description} →</p></a>)}</section></Layout>

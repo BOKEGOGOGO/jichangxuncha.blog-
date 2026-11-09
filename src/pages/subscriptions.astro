@@ -1,0 +1,10 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="订阅工具"><section class="page"><p class="eyebrow">SUBSCRIPTION DESK</p><h1>订阅链接工具</h1><p>粘贴服务商提供的订阅地址，复制链接或生成客户端导入入口。</p><div class="tool"><label for="url">第三方订阅链接</label><input id="url" type="url" placeholder="https://example.com/subscribe?token=…" autocomplete="off"/><label for="client">目标客户端</label><select id="client"><option value="clash">Clash</option><option value="shadowrocket">Shadowrocket</option></select><button class="button" id="copy">复制订阅地址</button><button class="button" id="generate">生成导入入口</button><p id="status" role="status" class="result"></p><a id="import" class="button" hidden>打开客户端 ↗</a></div><p class="notice">链接仅在当前页面处理，不上传、不保存。这里生成导入入口，不转换订阅格式；请确认服务商提供的格式与你的客户端兼容。导入需要设备已安装支持该协议的客户端。</p></section></Layout>
+<script>
+const input=document.querySelector<HTMLInputElement>('#url')!;const status=document.querySelector<HTMLElement>('#status')!;const link=document.querySelector<HTMLAnchorElement>('#import')!;
+function value(){const raw=input.value.trim();try{const u=new URL(raw);if(!['https:','http:'].includes(u.protocol))throw Error();return raw}catch{status.textContent='请输入有效的 HTTP 或 HTTPS 订阅地址。';link.hidden=true;return null}}
+document.querySelector('#copy')!.addEventListener('click',async()=>{const v=value();if(!v)return;try{await navigator.clipboard.writeText(v);status.textContent='订阅地址已复制。'}catch{status.textContent='复制失败，请手动选择输入框中的地址复制。'}});
+document.querySelector('#generate')!.addEventListener('click',()=>{const v=value();if(!v)return;const client=(document.querySelector('#client') as HTMLSelectElement).value;link.href=client==='clash'?`clash://install-config?url=${encodeURIComponent(v)}&name=${encodeURIComponent('机场巡查订阅')}`:`shadowrocket://add/${v}`;link.hidden=false;status.textContent='导入入口已生成。请在客户端中确认订阅。'});input.addEventListener('input',()=>{link.hidden=true;status.textContent=''});document.querySelector('#client')!.addEventListener('change',()=>{link.hidden=true;status.textContent=''});
+</script><style>[hidden]{display:none!important}</style>

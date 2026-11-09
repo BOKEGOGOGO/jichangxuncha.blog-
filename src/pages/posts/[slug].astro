@@ -1,0 +1,7 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import {posts} from '../../data/posts';
+export function getStaticPaths(){return posts.map(post=>({params:{slug:post.slug},props:{post}}))}
+const {post}=Astro.props;
+---
+<Layout title={post.title} description={post.description}><article class="page"><a href="/">← 返回首页</a><p class="eyebrow" style="margin-top:35px">{post.category}</p><h1>{post.title}</h1><p class="meta">{post.date} · {post.time} · 示例文章</p>{post.body.map(text=><p>{text}</p>)}</article></Layout>
