@@ -2,29 +2,31 @@
 import Layout from '../layouts/Layout.astro';
 ---
 <Layout title="订阅工具">
-  <section class="counter">
-    <div class="c-head">
-      <p class="mono">GATE S · SUBSCRIPTION DESK</p>
-      <h1 class="big">订阅链接工具</h1>
-      <p class="c-lede">粘贴服务商提供的订阅地址，复制链接或生成客户端导入入口。</p>
-    </div>
-    <div class="tool">
-      <div class="tool-top mono"><span>CHECK-IN</span><span>本地处理</span></div>
-      <div class="tool-body">
+  <div class="wrap">
+    <header class="page-head">
+      <span class="mono">SUBSCRIPTION</span>
+      <h1>订阅链接工具</h1>
+      <p>粘贴服务商提供的订阅地址，复制链接或生成客户端导入入口。</p>
+    </header>
+    <section class="sec">
+      <div class="sec-head">
+        <p class="note">链接仅在当前页面处理，不上传、不保存。</p>
+        <p class="hint">这里生成导入入口，不转换订阅格式；请确认服务商提供的格式与你的客户端兼容。导入需要设备已安装支持该协议的客户端。</p>
+      </div>
+      <div class="sec-body tool">
         <label for="url">第三方订阅链接</label>
         <input id="url" type="url" placeholder="https://example.com/subscribe?token=…" autocomplete="off"/>
         <label for="client">目标客户端</label>
         <select id="client"><option value="clash">Clash</option><option value="shadowrocket">Shadowrocket</option></select>
-        <div class="tool-actions">
-          <button class="btn btn-ghost" id="copy" type="button">复制订阅地址</button>
+        <div class="actions">
+          <button class="btn btn-line" id="copy" type="button">复制订阅地址</button>
           <button class="btn" id="generate" type="button">生成导入入口</button>
         </div>
         <p id="status" role="status" class="result"></p>
         <a id="import" class="btn btn-go" hidden>打开客户端 <span aria-hidden="true">→</span></a>
       </div>
-    </div>
-  </section>
-  <aside class="notam"><b>注意</b><span>链接仅在当前页面处理，不上传、不保存。这里生成导入入口，不转换订阅格式；请确认服务商提供的格式与你的客户端兼容。导入需要设备已安装支持该协议的客户端。</span></aside>
+    </section>
+  </div>
 </Layout>
 <script>
 const input=document.querySelector<HTMLInputElement>('#url')!;const status=document.querySelector<HTMLElement>('#status')!;const link=document.querySelector<HTMLAnchorElement>('#import')!;
@@ -34,24 +36,18 @@ document.querySelector('#generate')!.addEventListener('click',()=>{const v=value
 </script>
 <style>
   [hidden]{display:none!important}
-  .counter{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,6fr);gap:clamp(24px,5vw,80px);align-items:center;min-height:calc(100svh - 60px);background:var(--ink);color:var(--paper);padding:clamp(32px,5vw,72px) var(--gutter)}
-  .c-head .mono{color:var(--signal);margin-bottom:14px}
-  .c-head h1{font-size:clamp(46px,6.5vw,112px);color:var(--signal);white-space:nowrap}
-  .c-lede{margin-top:18px;font-size:clamp(16px,1.5vw,19px);max-width:32em}
-  .tool{background:var(--paper);color:var(--ink)}
-  .tool-top{display:flex;justify-content:space-between;background:var(--signal);padding:11px clamp(18px,2.4vw,30px)}
-  .tool-body{padding:clamp(18px,2.4vw,30px)}
-  label{display:block;margin:18px 0 8px;font-weight:800;font-size:15px}
+  .hint{margin-top:12px;font-size:14px;color:var(--muted);max-width:26em}
+  .tool{max-width:720px}
+  label{display:block;margin:24px 0 8px;font-weight:500;font-size:15px}
   label:first-child{margin-top:0}
-  input,select{width:100%;min-height:52px;padding:0 14px;border:2px solid var(--ink);border-radius:0;background:#fff;color:var(--ink);font:500 15px var(--mono)}
-  input::placeholder{color:#6B6A65}
-  input:focus,select:focus{outline:3px solid var(--taxi);outline-offset:1px}
-  .tool-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
-  .btn{display:flex;align-items:center;justify-content:center;gap:14px;min-height:54px;padding:0 14px;border:2px solid var(--ink);border-radius:0;background:var(--ink);color:var(--signal);font:900 18px/1.1 var(--display);cursor:pointer;transition:background .15s,color .15s}
-  .btn:hover{background:var(--taxi);border-color:var(--taxi);color:#fff}
-  .btn-ghost{background:transparent;color:var(--ink)}
-  .btn-go{background:var(--signal);color:var(--ink)}
-  .result{min-height:1.7em;margin-top:14px;font-size:14px;font-weight:600;overflow-wrap:anywhere}
-  @media(max-width:860px){.counter{grid-template-columns:1fr;min-height:0}}
-  @media(max-width:420px){.tool-actions{grid-template-columns:1fr}}
+  input,select{width:100%;min-height:50px;padding:0 14px;border:1px solid var(--ink);border-radius:0;background:#fff;color:var(--ink);font:500 15px var(--mono-f)}
+  input::placeholder{color:var(--muted)}
+  input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
+  .actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
+  .btn{display:flex;align-items:center;justify-content:center;gap:12px;min-height:50px;padding:0 14px;border:1px solid var(--ink);border-radius:0;background:var(--ink);color:var(--paper);font:500 15px var(--head);cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+  .btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn-line{background:transparent;color:var(--ink)}
+  .btn-go{background:var(--accent);border-color:var(--accent);color:#fff}
+  .result{min-height:1.75em;margin-top:14px;font-size:14px;overflow-wrap:anywhere}
+  @media(max-width:420px){.actions{grid-template-columns:1fr}}
 </style>

@@ -1,18 +1,17 @@
 ---
-import '@fontsource/noto-sans-sc/900.css';
-import '@fontsource/barlow-condensed/600.css';
-import '@fontsource/barlow-condensed/800.css';
+import '@fontsource/noto-sans-sc/500.css';
 import '@fontsource/jetbrains-mono/500.css';
 import '../styles/global.css';
 import Loader from '../components/Loader.astro';
+import Mark from '../components/Mark.astro';
 
 const { title = '机场巡查博客', description = '机场推荐、VPS 与订阅使用笔记。' } = Astro.props;
 const path = Astro.url.pathname;
 const nav = [
-  { key: 'A', label: '机场推荐', href: '/category/airports/' },
-  { key: 'V', label: 'VPS', href: '/category/vps/' },
-  { key: 'Y', label: '一元机场', href: '/category/budget/' },
-  { key: 'S', label: '订阅工具', href: '/subscriptions/' },
+  { label: '机场推荐', href: '/category/airports/' },
+  { label: 'VPS', href: '/category/vps/' },
+  { label: '一元机场', href: '/category/budget/' },
+  { label: '订阅工具', href: '/subscriptions/' },
 ];
 ---
 <!doctype html>
@@ -21,7 +20,7 @@ const nav = [
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="description" content={description}/>
-    <meta name="theme-color" content="#111110"/>
+    <meta name="theme-color" content="#F6F6F3"/>
     <link rel="icon" href="/favicon.svg"/>
     <link rel="canonical" href={new URL(path, Astro.site)}/>
     <title>{title} · jichangxuncha.blog</title>
@@ -34,38 +33,34 @@ const nav = [
         if (location.search.indexOf('loader') > -1) seen = false;
         d.classList.add(seen ? 'no-loader' : 'loading');
         if (seen) d.classList.add('is-ready');
-        // 兜底：脚本出错也绝不能把人挡在门外
-        setTimeout(function () { d.classList.remove('loading'); d.classList.add('is-ready'); }, 7000);
+        // 兜底：脚本出错也不能把人挡在门外
+        setTimeout(function () { d.classList.remove('loading'); d.classList.add('is-ready'); }, 6000);
       })();
     </script>
   </head>
   <body>
     <Loader/>
     <a class="skip" href="#main">跳到正文</a>
-    <header class="sign">
-      <a class="sign-brand" href="/" aria-label="机场巡查首页">
-        <span class="sign-mark">巡</span>
-        <span class="sign-name">机场巡查<small>JICHANGXUNCHA.BLOG</small></span>
-      </a>
-      <nav aria-label="主导航">
-        {nav.map((n) => (
-          <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>
-            <b>{n.key}</b><span>{n.label}</span>
-          </a>
-        ))}
-      </nav>
+    <header class="top">
+      <div class="wrap top-in">
+        <a class="brand" href="/" aria-label="机场巡查首页"><Mark/><span>机场巡查</span></a>
+        <nav aria-label="主导航">
+          {nav.map((n) => <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>)}
+        </nav>
+      </div>
     </header>
     <main id="main"><slot/></main>
     <footer class="foot">
-      <div class="foot-top">
-        <p>保持观察，认真记录。<br/>机场推荐 / VPS / 订阅笔记</p>
-        <div class="foot-links">
+      <div class="wrap foot-in">
+        <div class="foot-brand"><Mark size={36}/><p>保持观察，认真记录。</p></div>
+        <div class="foot-col">
+          {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+        </div>
+        <div class="foot-col">
           <a href="/about/">关于本站</a>
-          <a href="/subscriptions/">订阅工具</a>
-          <span>© {new Date().getFullYear()} jichangxuncha.blog</span>
+          <span class="mono">© {new Date().getFullYear()} jichangxuncha.blog</span>
         </div>
       </div>
-      <a class="foot-mark" href="/" aria-label="回到首页">机场巡查</a>
     </footer>
     <script>import '../scripts/site.js';</script>
   </body>

@@ -1,0 +1,21 @@
+---
+// 栏目小图：11×11 点阵，点亮的点拼出图形。
+const { slug } = Astro.props;
+const lit = (x, y) => {
+  if (slug === 'airports') return (y === 5 && x <= 5) || (x === 5 && y >= 2 && y <= 8) || ((y === 2 || y === 8) && x >= 5);
+  if (slug === 'vps') return x >= 1 && x <= 9 && [1, 2, 5, 6, 9].includes(y) && !(x === 8 && [2, 6].includes(y));
+  const r = Math.hypot(x - 5, y - 5);
+  return (r > 3.6 && r < 4.7) || (x === 5 && y >= 3 && y <= 7);
+};
+const cells = [];
+for (let y = 0; y < 11; y++) for (let x = 0; x < 11; x++) cells.push({ x, y, on: lit(x, y) });
+---
+<svg class="glyph" viewBox="0 0 110 110" aria-hidden="true">
+  {cells.map((c) => <circle cx={5 + c.x * 10} cy={5 + c.y * 10} r={c.on ? 3.6 : 1.4} class={c.on ? 'g-on' : 'g-off'}/>)}
+</svg>
+<style is:global>
+  .glyph{display:block;width:100%;height:auto}
+  .g-off{fill:var(--dot)}
+  .g-on{fill:var(--ink);transition:fill .2s}
+  a:hover .g-on{fill:var(--accent)}
+</style>

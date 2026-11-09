@@ -1,0 +1,39 @@
+---
+import { posts } from '../data/posts';
+const { rows = posts, showCategory = true } = Astro.props;
+---
+<ul class="posts">
+  {rows.map((post) => (
+    <li>
+      <a class="post" href={`/posts/${post.slug}/`}>
+        <span class="post-meta mono"><span>{post.date}</span><span>{post.time}</span></span>
+        <span class="post-main"><strong>{post.title}</strong><small>{post.description}</small></span>
+        <span class="post-cat">{showCategory ? post.category : ''}<em class="mono">{post.status ?? '示例'}</em></span>
+        <span class="post-go" aria-hidden="true">→</span>
+      </a>
+    </li>
+  ))}
+</ul>
+<style>
+  .posts{border-top:1px solid var(--ink)}
+  .posts li{border-bottom:1px solid var(--line)}
+  .post{display:grid;grid-template-columns:120px minmax(0,1fr) 100px 28px;gap:24px;align-items:start;padding:clamp(20px,2.4vw,30px) 0}
+  .post-meta{color:var(--muted);padding-top:.35em}
+  .post-meta span{display:block}
+  .post-main strong{display:block;font:500 clamp(20px,2vw,27px)/1.35 var(--head);text-wrap:balance;transition:color .15s}
+  .post-main small{display:block;margin-top:6px;font-size:15px;color:var(--muted)}
+  .post-cat{padding-top:.3em;font-size:14px}
+  .post-cat em{display:block;font-style:normal;color:var(--muted)}
+  .post-go{padding-top:.1em;font-size:20px;text-align:right;transition:transform .18s,color .15s}
+  .post:hover strong,.post:hover .post-go{color:var(--accent)}
+  .post:hover .post-go{transform:translateX(4px)}
+  @media(max-width:700px){
+    .post{grid-template-columns:minmax(0,1fr) auto;gap:10px 16px}
+    .post-meta{grid-column:1;grid-row:1}
+    .post-cat{grid-column:2;grid-row:1;text-align:right}
+    .post-main{grid-column:1/-1;grid-row:2}
+    .post-go{display:none}
+    .post-meta span{display:inline}
+    .post-meta span+span{margin-left:12px}
+  }
+</style>

@@ -1,0 +1,61 @@
+---
+// 主视觉：21×21 点阵。中间一列是墙，绿线从缺口穿过。鼠标靠近时圆点会轻微放大。
+const N = 21, STEP = 24, O = 12;
+const WALL = 10, GAP = 10;
+const at = (i) => O + i * STEP;
+const route = [[0, 15], [4, 15], [4, 10], [16, 10], [16, 5], [20, 5]];
+const d = route.map(([x, y], i) => `${i ? 'L' : 'M'}${at(x)} ${at(y)}`).join('');
+const dots = [];
+for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+  if (x === WALL && y === GAP) continue;
+  dots.push({ x: at(x), y: at(y), wall: x === WALL });
+}
+---
+<svg class="field" id="field" viewBox="0 0 504 504" aria-hidden="true">
+  <g class="field-dots">
+    {dots.map((p) => p.wall
+      ? <circle cx={p.x} cy={p.y} r="4" class="f-wall"/>
+      : <circle cx={p.x} cy={p.y} r="1.9" class="f-dot"/>)}
+  </g>
+  <path d={d} pathLength="100" class="f-line"/>
+  <path d={d} pathLength="100" class="f-pulse"/>
+  <circle cx={at(0)} cy={at(15)} r="6" class="f-node"/>
+  <circle cx={at(20)} cy={at(5)} r="6" class="f-node"/>
+</svg>
+
+<style is:global>
+  .field{display:block;width:100%;height:auto}
+  .f-dot{fill:var(--dot)}
+  .f-wall{fill:var(--ink)}
+  .f-line,.f-pulse{fill:none;stroke-linejoin:round}
+  .f-line{stroke:var(--accent);stroke-width:2.5;stroke-dasharray:100;transition:stroke-dashoffset 1.4s cubic-bezier(.6,0,.2,1) .15s}
+  .f-pulse{stroke:var(--accent);stroke-width:6;stroke-linecap:round;stroke-dasharray:3 97;animation:f-run 7s linear infinite}
+  .f-node{fill:var(--accent);transition:opacity .4s 1.3s}
+  @keyframes f-run{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+  html.js:not(.is-ready) .f-line{stroke-dashoffset:100}
+  html.js:not(.is-ready) .f-pulse,html.js:not(.is-ready) .f-node{opacity:0}
+</style>
+
+<script>
+  const field = document.getElementById('field');
+  if (field && matchMedia('(hover:hover) and (prefers-reduced-motion:no-preference)').matches) {
+    const dots = [...field.querySelectorAll('.f-dot')].map((el) => ({ el, x: +el.getAttribute('cx'), y: +el.getAttribute('cy'), big: false }));
+    let frame = 0, px = -999, py = -999;
+    const draw = () => {
+      frame = 0;
+      for (const d of dots) {
+        const dist = Math.hypot(d.x - px, d.y - py);
+        if (dist < 80) { d.el.setAttribute('r', (1.9 + (1 - dist / 80) * 3).toFixed(2)); d.big = true; }
+        else if (d.big) { d.el.setAttribute('r', '1.9'); d.big = false; }
+      }
+    };
+    const queue = () => { if (!frame) frame = requestAnimationFrame(draw); };
+    field.addEventListener('pointermove', (e) => {
+      const r = field.getBoundingClientRect();
+      px = ((e.clientX - r.left) / r.width) * 504;
+      py = ((e.clientY - r.top) / r.height) * 504;
+      queue();
+    });
+    field.addEventListener('pointerleave', () => { px = py = -999; queue(); });
+  }
+</script>

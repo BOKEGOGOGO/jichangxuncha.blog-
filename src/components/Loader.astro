@@ -1,76 +1,64 @@
 ---
-import Flap from './Flap.astro';
-const checks = [['线路', 'ROUTES'], ['套餐', 'PLANS'], ['服务', 'SERVICE']];
+// loading：一条线逐点穿过墙上的缺口，接通后整层淡出。
+const COLS = 13, ROWS = 7, WALL = 6, GAP = 3;
+const route = [[0, 5], [1, 5], [2, 5], [3, 5], [3, 4], [3, 3], [4, 3], [5, 3], [6, 3], [7, 3], [8, 3], [9, 3], [9, 2], [9, 1], [10, 1], [11, 1], [12, 1]];
+const order = new Map(route.map(([x, y], i) => [`${x},${y}`, i]));
+const cells = [];
+for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) {
+  const step = order.get(`${x},${y}`);
+  cells.push({ x, y, step, wall: x === WALL && y !== GAP });
+}
 ---
 <div class="loader" id="loader" role="status" aria-label="机场巡查正在加载">
-  <div class="door door-l"></div>
-  <div class="door door-r"></div>
-  <div class="lo">
-    <div class="lo-top"><span>JICHANGXUNCHA.BLOG</span><span>PRE-FLIGHT CHECK</span></div>
-    <div class="lo-mid">
-      <div class="lo-tiles">{['机', '场', '巡', '查'].map((c) => <Flap c=" " data-final={c} />)}</div>
-      <ul class="lo-checks">
-        {checks.map(([cn, en]) => <li><b aria-hidden="true"></b>{cn}<small>{en}</small></li>)}
-      </ul>
-    </div>
-    <div class="lo-strip">
-      <div class="lo-runway"><i class="lo-lit"></i>
-        <svg class="lo-plane" viewBox="-34 -26 68 52" aria-hidden="true"><path d="M30 0C30-3 24-4 18-4H6L-6-24h-7l7 20h-14l-6-8h-5l3 12-3 12h5l6-8H-6l-7 20h7L6 4h12c6 0 12-1 12-4Z"/></svg>
-      </div>
-      <div class="lo-foot"><span>点击任意处跳过</span><output id="lo-pct">000%</output></div>
-    </div>
+  <div class="lo-box">
+    <svg class="lo-grid" viewBox="0 0 260 140" aria-hidden="true">
+      {cells.map((c) => (
+        <circle cx={10 + c.x * 20} cy={10 + c.y * 20} r={c.wall ? 4.4 : 2.2}
+          class:list={[c.wall ? 'lo-wall' : 'lo-dot', c.step !== undefined && 'lo-step']}
+          data-step={c.step}/>
+      ))}
+    </svg>
+    <div class="lo-text"><span>机场巡查</span><output class="mono" id="lo-pct">0%</output></div>
   </div>
 </div>
 <noscript><style>.loader{display:none!important}</style></noscript>
 
 <script>
-  import { spin, settle } from '../scripts/flap.js';
-
   const root = document.documentElement;
   const loader = document.getElementById('loader');
 
   if (loader && root.classList.contains('loading')) {
     const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const pct = document.getElementById('lo-pct');
-    const checks = [...loader.querySelectorAll('.lo-checks li')];
-    const tiles = [...loader.querySelectorAll('.lo-tiles .flap')];
-    const finals = ['机', '场', '巡', '查'];
-    const pool = '线路流量售后订阅节点航站跑道登机口倍率套餐周期'.split('');
+    const steps = [...loader.querySelectorAll('.lo-step')].sort((a, b) => a.dataset.step - b.dataset.step);
     const started = performance.now();
-    const minTime = calm ? 500 : 2500;
-    const maxTime = 4200;
-    let pageReady = false;
-    let leaving = false;
+    const minTime = calm ? 300 : 1500;
+    const maxTime = 3600;
+    let pageReady = false, leaving = false;
 
-    const ready = Promise.all([
+    Promise.all([
       document.readyState === 'complete' ? null : new Promise((r) => addEventListener('load', r, { once: true })),
       document.fonts ? document.fonts.ready : null,
-    ]);
-    ready.then(() => { pageReady = true; });
-
-    if (calm) tiles.forEach((t, i) => settle(t, finals[i]));
-    else tiles.forEach((t, i) => spin(t, finals[i], 7 + i * 3, pool));
+    ]).then(() => { pageReady = true; });
 
     const paint = (p) => {
-      loader.style.setProperty('--p', p);
-      pct.textContent = `${String(Math.round(p * 100)).padStart(3, '0')}%`;
-      checks.forEach((li, i) => li.classList.toggle('ok', p >= (i + 1) / 3 - 0.02));
+      pct.textContent = `${Math.round(p * 100)}%`;
+      const lit = Math.round(p * steps.length);
+      steps.forEach((s, i) => s.classList.toggle('on', i < lit));
     };
 
     const finish = () => {
       if (leaving) return;
       leaving = true;
-      tiles.forEach((t, i) => settle(t, finals[i]));
       paint(1);
       try { sessionStorage.setItem('jx-boarded', '1'); } catch {}
-      // 先让人看清“机场巡查”四个字，再开门。
-      const hold = calm ? 0 : 420;
-      setTimeout(() => loader.classList.add('opening'), hold);
+      const hold = calm ? 0 : 260;
       setTimeout(() => {
+        loader.classList.add('leaving');
         root.classList.remove('loading');
         root.classList.add('is-ready');
-      }, hold + (calm ? 0 : 320));
-      setTimeout(() => loader.remove(), hold + (calm ? 200 : 1300));
+      }, hold);
+      setTimeout(() => loader.remove(), hold + 700);
     };
 
     const tick = (now) => {
@@ -90,32 +78,15 @@ const checks = [['线路', 'ROUTES'], ['套餐', 'PLANS'], ['服务', 'SERVICE']
 </script>
 
 <style is:global>
-  .loader{position:fixed;inset:0;z-index:100;color:var(--paper);overflow:hidden;cursor:pointer;animation:loader-gone 0s linear 7s forwards}
+  .loader{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:var(--paper);cursor:pointer;transition:opacity .6s,visibility 0s .6s;animation:loader-gone 0s linear 6s forwards}
   @keyframes loader-gone{to{visibility:hidden;pointer-events:none}}
   html.no-loader .loader{display:none}
-  .door{position:absolute;top:0;bottom:0;width:50.5%;background:var(--ink);transition:transform .95s cubic-bezier(.76,0,.2,1)}
-  .door-l{left:0}.door-r{right:0}
-  .door::after{content:"";position:absolute;top:0;bottom:0;width:22px;opacity:0;transition:opacity .15s;background:repeating-linear-gradient(-45deg,var(--signal) 0 16px,var(--ink) 16px 32px)}
-  .door-l::after{right:0}.door-r::after{left:0}
-  .opening .door::after{opacity:1}
-  .opening .door-l{transform:translateX(-101%)}
-  .opening .door-r{transform:translateX(101%)}
-  .lo{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(16px,3vw,36px);transition:opacity .22s}
-  .opening .lo{opacity:0}
-  .lo-top,.lo-foot{display:flex;justify-content:space-between;gap:16px;font:500 12px/1.4 var(--mono);letter-spacing:.08em;color:var(--dim)}
-  .lo-mid{display:grid;justify-items:center;gap:clamp(24px,4vh,44px)}
-  .lo-tiles{--s:clamp(76px,17vmin,190px);display:flex;gap:clamp(5px,1vmin,12px);font-family:var(--display);font-weight:900}
-  .lo-tiles .flap{color:var(--signal)}
-  .lo-checks{list-style:none;margin:0;padding:0;display:flex;gap:clamp(18px,5vw,56px);font-size:15px;font-weight:700}
-  .lo-checks li{display:flex;align-items:center;gap:8px;color:var(--dim);transition:color .2s}
-  .lo-checks small{font:500 11px var(--mono);letter-spacing:.06em;display:none}
-  .lo-checks b{width:12px;height:12px;border:1.5px solid currentColor;transition:background .15s}
-  .lo-checks li.ok{color:var(--paper)}
-  .lo-checks li.ok b{background:var(--signal);border-color:var(--signal)}
-  @media(min-width:700px){.lo-checks small{display:inline}}
-  .lo-runway{--p:inherit;position:relative;height:44px;margin-bottom:12px;background:repeating-linear-gradient(90deg,#3a3a37 0 26px,transparent 26px 46px) 0 50%/100% 3px no-repeat}
-  .lo-lit{position:absolute;left:0;top:50%;height:3px;margin-top:-1.5px;width:calc(var(--p,0)*100%);background:repeating-linear-gradient(90deg,var(--signal) 0 26px,transparent 26px 46px)}
-  .lo-plane{position:absolute;top:0;width:58px;height:44px;left:calc(var(--p,0)*(100% - 58px));fill:var(--paper)}
-  .lo-foot output{color:var(--signal);font-size:14px}
-  @media(prefers-reduced-motion:reduce){.door{transition:none}.opening .door{opacity:0}}
+  .loader.leaving{opacity:0;visibility:hidden;pointer-events:none}
+  .lo-box{width:min(340px,72vw)}
+  .lo-grid{display:block;width:100%;height:auto}
+  .lo-dot{fill:var(--dot);transition:fill .12s,r .12s}
+  .lo-wall{fill:var(--ink)}
+  .lo-step.on{fill:var(--accent);r:4.4px}
+  .lo-text{display:flex;justify-content:space-between;align-items:baseline;margin-top:18px;padding-top:12px;border-top:1px solid var(--ink);font:500 15px var(--head)}
+  .lo-text output{color:var(--muted)}
 </style>

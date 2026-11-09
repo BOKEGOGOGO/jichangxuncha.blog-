@@ -1,14 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import PosterArt from '../../components/PosterArt.astro';
+import FlyV from '../../components/FlyV.astro';
+import Glyph from '../../components/Glyph.astro';
 import { posts } from '../../data/posts';
-import { gateOf, flightNo } from '../../data/site';
+import { topicOf } from '../../data/site';
 export function getStaticPaths() { return posts.map((post) => ({ params: { slug: post.slug }, props: { post } })); }
 const { post } = Astro.props;
-const i = posts.indexOf(post);
-const gate = gateOf(post.category);
-const next = posts[(i + 1) % posts.length];
-const nextGate = gateOf(next.category);
+const topic = topicOf(post.category);
+const next = posts[(posts.indexOf(post) + 1) % posts.length];
 // “看线路：……”这样的段落拆成小标题和正文
 const blocks = post.body.map((t) => {
   const [head, ...rest] = t.split('：');
@@ -16,57 +15,58 @@ const blocks = post.body.map((t) => {
 });
 ---
 <Layout title={post.title} description={post.description}>
-  <div class="taxi" id="taxi" aria-hidden="true"><i></i></div>
-  <article>
-    <header class={`band band-${gate.tone}`}>
-      <div class="band-art"><PosterArt kind={gate.key}/></div>
-      <a class="back" href="/">← 返回首页</a>
-      <div class="band-text">
-        <span class="mono">{flightNo(i)} · GATE {gate.key} · {post.category}</span>
-        <h1><span>{post.title}</span></h1>
-      </div>
+  <div class="bar" id="progress" aria-hidden="true"></div>
+  <article class="wrap">
+    <header class="page-head">
+      <a class="mono" href={`/category/${topic.slug}/`}>← {post.category}</a>
+      <h1>{post.title}</h1>
     </header>
-    <div class="strip mono">
-      <div><small>航班</small>{flightNo(i)}</div>
-      <div><small>日期</small>{post.date}</div>
-      <div><small>阅读</small>{post.time}</div>
-      <div><small>状态</small>示例文章</div>
-    </div>
-    <div class="body">
-      <p class="lede">{post.description}</p>
-      <div class="flow">
-        {blocks.map((b) => b.head
-          ? <section class="point"><h2>{b.head}</h2><p>{b.text}</p></section>
+    <div class="sec art">
+      <aside class="sec-head"><div class="sec-sticky">
+        <div class="art-glyph"><Glyph slug={topic.slug}/></div>
+        <dl class="mono">
+          <dt>日期</dt><dd>{post.date}</dd>
+          <dt>阅读</dt><dd>{post.time}</dd>
+          <dt>状态</dt><dd>{post.status ?? '示例文章'}</dd>
+        </dl>
+      </div></aside>
+      <div class="sec-body flow">
+        <p class="lede">{post.description}</p>
+        {post.slug === 'flyv' ? <FlyV/> : blocks.map((b) => b.head
+          ? <section><h2>{b.head}</h2><p>{b.text}</p></section>
           : <p>{b.text}</p>)}
       </div>
     </div>
+    <a class="next" href={`/posts/${next.slug}/`}>
+      <span class="mono">下一篇</span>
+      <strong>{next.title}</strong>
+      <span class="arrow" aria-hidden="true">→</span>
+    </a>
   </article>
-  <a class="next" href={`/posts/${next.slug}/`}>
-    <span class="mono">下一班 NEXT · {flightNo(posts.indexOf(next))} · GATE {nextGate.key}</span>
-    <strong>{next.title}</strong>
-    <b aria-hidden="true">→</b>
-  </a>
 </Layout>
 <style>
-  .taxi{position:fixed;left:0;right:0;top:60px;height:5px;z-index:39;background:rgba(17,17,16,.16)}
-  .taxi i{display:block;height:100%;width:calc(var(--p,0)*100%);background:var(--signal);box-shadow:0 0 0 1px var(--ink)}
-  @media(max-width:760px){.taxi{top:0}}
-  .strip{display:grid;grid-template-columns:repeat(4,1fr);background:var(--ink);color:var(--signal)}
-  .strip>div{padding:14px var(--gutter);border-left:1px solid var(--line)}
-  .strip>div:first-child{border-left:0}
-  .strip small{display:block;color:var(--dim);font:inherit;font-size:11px}
-  @media(max-width:560px){.strip{grid-template-columns:1fr 1fr}.strip>div:nth-child(3){border-left:0}}
-  .body{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,5vw,80px);padding:clamp(40px,6vw,96px) var(--gutter)}
-  .lede{font:900 clamp(26px,3.2vw,48px)/1.28 var(--display)}
-  .flow{max-width:36em}
-  .flow p{font-size:18px;line-height:1.9;margin-bottom:1.3em}
-  .point{padding-top:18px;border-top:3px solid var(--ink);margin-top:34px}
-  .point h2{font:900 clamp(26px,2.8vw,38px)/1.2 var(--display);margin-bottom:10px}
-  @media(max-width:860px){.body{grid-template-columns:1fr}}
-  .next{display:grid;grid-template-columns:1fr auto;gap:8px 20px;align-items:end;padding:clamp(28px,4vw,56px) var(--gutter);background:var(--signal);transition:background .15s,color .15s}
-  .next .mono{grid-column:1/-1}
-  .next strong{font:900 clamp(28px,4.6vw,72px)/1.12 var(--display)}
-  .next b{font:800 clamp(40px,6vw,88px)/1 var(--display);transition:transform .2s}
-  .next:hover{background:var(--ink);color:var(--signal)}
-  .next:hover b{transform:translateX(8px)}
+  .bar{position:fixed;left:0;top:0;z-index:50;height:2px;width:100%;background:var(--accent);transform:scaleX(var(--p,0));transform-origin:0 50%}
+  .page-head a{transition:color .15s}
+  .page-head a:hover{color:var(--accent)}
+  .art-glyph{width:96px;margin-bottom:24px}
+  dl{display:grid;grid-template-columns:48px 1fr;gap:4px 0;margin:0;color:var(--muted)}
+  dd{margin:0;color:var(--ink)}
+  .flow{max-width:42em}
+  .lede{font:500 clamp(20px,2vw,26px)/1.5 var(--head);margin-bottom:32px}
+  .flow p{font-size:17px;line-height:1.9;margin-bottom:1.2em}
+  .flow .lede{font-size:clamp(20px,2vw,26px);line-height:1.5}
+  .flow section{padding-top:20px;margin-top:28px;border-top:1px solid var(--line)}
+  .flow h2{font-size:clamp(20px,2vw,25px);margin-bottom:8px}
+  .next{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;align-items:baseline;padding-block:clamp(28px,4vw,48px);border-top:1px solid var(--ink)}
+  .next .mono{grid-column:1/5;color:var(--muted)}
+  .next strong{grid-column:5/12;font:500 clamp(22px,2.6vw,36px)/1.3 var(--head);transition:color .15s}
+  .arrow{grid-column:12;text-align:right;font-size:24px;transition:transform .18s,color .15s}
+  .next:hover strong,.next:hover .arrow{color:var(--accent)}
+  .next:hover .arrow{transform:translateX(4px)}
+  @media(max-width:860px){
+    .art-glyph{display:none}
+    .next{display:block}
+    .next strong{display:block;margin-top:6px}
+    .arrow{display:none}
+  }
 </style>
