@@ -42,6 +42,7 @@ const blocks = post.body.map((t) => {
         {post.slug === 'flyv' ? <FlyV/> : post.slug === 'muguang' ? <Muguang/> : post.slug === 'weifeng' ? <Weifeng/> : post.slug === 'feimao' ? <Feimao/> : brand ? <BrandDossier brand={brand}/> : blocks.map((b) => b.head
           ? <section><h2>{b.head}</h2><p>{b.text}</p></section>
           : <p>{b.text}</p>)}
+        {post.slug === 'vps-checklist' && <section><h2>按待确认的问题继续阅读</h2><p><a href="/vps/guides/how-to-choose-vps/">应用资源与配置选择 →</a></p><p><a href="/vps/guides/regions-and-routing/">机房地区与业务依赖 →</a></p><p><a href="/knowledge/vps-maintenance/">维护、安全与恢复清单 →</a></p><p><a href="/vps/guides/vps-vs-airport/">自建VPS与现成服务的责任比较 →</a></p></section>}
       </div>
     </div>
     <a class="next" href={`/posts/${next.slug}/`}>

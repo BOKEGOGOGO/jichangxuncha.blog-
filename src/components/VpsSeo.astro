@@ -1,11 +1,11 @@
 ---
 import {verifiedDate} from '../data/vps';
-const {title,description,path,kind='WebPage',crumbs=[],faqs=[]}=Astro.props;
+const {title,description,path,kind='WebPage',crumbs=[],faqs=[],updated=verifiedDate}=Astro.props;
 const origin='https://jichangxuncha.blog';const url=new URL(path,origin).href;
 const fullTitle=title+' · jichangxuncha.blog';
 const graph={'@context':'https://schema.org','@graph':[
 {'@type':'WebSite','@id':origin+'/#website',url:origin+'/',name:'机场巡查博客',inLanguage:'zh-CN'},
-{'@type':kind,'@id':url+'#page',url,name:title,description,inLanguage:'zh-CN',dateModified:verifiedDate,isPartOf:{'@id':origin+'/#website'},breadcrumb:{'@id':url+'#breadcrumb'},...(['Article','TechArticle'].includes(kind)?{headline:title,author:{'@type':'Organization',name:'机场巡查博客',url:origin+'/'}}:{})},
+{'@type':kind,'@id':url+'#page',url,name:title,description,inLanguage:'zh-CN',dateModified:updated,isPartOf:{'@id':origin+'/#website'},breadcrumb:{'@id':url+'#breadcrumb'},...(['Article','TechArticle'].includes(kind)?{headline:title,author:{'@type':'Organization',name:'机场巡查博客',url:origin+'/'}}:{})},
 {'@type':'BreadcrumbList','@id':url+'#breadcrumb',itemListElement:[{name:'首页',href:'/'},...crumbs].map((c,i)=>({'@type':'ListItem',position:i+1,name:c.name,item:new URL(c.href,origin).href}))},
 ...(faqs.length?[{'@type':'FAQPage','@id':url+'#faq',isPartOf:{'@id':url+'#page'},mainEntity:faqs.map(([name,text])=>({'@type':'Question',name,acceptedAnswer:{'@type':'Answer',text}}))}]:[])
 ]};

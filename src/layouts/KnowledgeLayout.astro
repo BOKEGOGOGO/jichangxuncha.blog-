@@ -1,0 +1,9 @@
+---
+import Layout from './Layout.astro';
+import '../styles/vps.css';
+import {libraryUpdated} from '../data/knowledge-library';
+const {title,description,path,faqs=[],kind='TechArticle'}=Astro.props;
+const origin='https://jichangxuncha.blog'; const url=new URL(path,origin).href;
+const graph={'@context':'https://schema.org','@graph':[{'@type':kind,'@id':url+'#page',url,headline:title,name:title,description,inLanguage:'zh-CN',dateModified:libraryUpdated,author:{'@type':'Organization',name:'机场巡查博客',url:origin+'/'}},{'@type':'BreadcrumbList',itemListElement:[{name:'首页',href:'/'},{name:'网络知识库',href:'/knowledge/'},...(path==='/knowledge/'?[]:[{name:title,href:path}])].map((c,i)=>({'@type':'ListItem',position:i+1,name:c.name,item:new URL(c.href,origin).href}))},...(faqs.length?[{'@type':'FAQPage',mainEntity:faqs.map(([name,text])=>({'@type':'Question',name,acceptedAnswer:{'@type':'Answer',text}}))}]:[])]};
+---
+<Layout title={title} description={description} canonicalPath={path} seo><Fragment slot="seo"><meta property="og:type" content={kind==='TechArticle'?'article':'website'}/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:url" content={url}/><meta property="og:locale" content="zh_CN"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content={title}/><meta name="twitter:description" content={description}/><script type="application/ld+json" set:html={JSON.stringify(graph).replace(/</g,'\u003c')}/></Fragment><div class="vps"><div class="wrap"><nav class="vps-nav" aria-label="知识专题导航"><a class="vps-wordmark" href="/knowledge/">KNOWLEDGE / 网络知识库</a><div><a href="/knowledge/#clients">客户端</a><a href="/knowledge/#troubleshooting">故障排查</a><a href="/knowledge/#network">网络原理</a></div></nav><slot/></div></div></Layout>

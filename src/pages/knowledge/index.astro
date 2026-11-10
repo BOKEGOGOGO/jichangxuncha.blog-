@@ -1,0 +1,7 @@
+---
+import KnowledgeLayout from '../../layouts/KnowledgeLayout.astro';
+import {libraryArticles,libraryGroups} from '../../data/knowledge-library';
+const title='网络知识库：代理客户端、节点故障、协议与服务器维护';
+const description='按实际问题学习代理客户端、节点超时、订阅、DNS与TLS，阅读机场选购、网络原理与VPS维护专题；从基础概念走向可验证的诊断，不用未经证实的排名代替判断。';
+---
+<KnowledgeLayout title={title} description={description} path="/knowledge/" kind="CollectionPage"><header class="page-head vps-article-head"><span class="vps-kicker mono">KNOWLEDGE / 按问题阅读</span><h1>网络知识库</h1><p>先解决问题，再选择工具或服务。从六类专题进入：新手先读概念，已有配置看对应客户端，连接异常按错误阶段排查。需要Clash配置操作或VPS服务器管理，也能从对应分类继续阅读。</p><div class="vps-related"><a href="#basics">第一次接触，从基础开始 →</a><a href="#troubleshooting">已经连不上，先看故障 →</a></div></header><nav class="vps-hub-nav" aria-label="知识分类">{libraryGroups.map(g=><a href={'#'+g.id}>{g.title} ↓</a>)}</nav>{libraryGroups.map(g=><section class="vps-block" id={g.id}><div class="vps-section-heading"><div><h2>{g.title}</h2><p>{g.description}</p></div></div><div class="vps-topic-grid">{libraryArticles.filter(a=>a.group===g.id).map(a=><a href={a.path}><h3>{a.title}</h3><p>{a.description}</p><span class="vps-link">阅读完整文章 →</span></a>)}</div><div class="vps-related">{g.existing.map(l=><a href={l.href}>{l.label} →</a>)}</div></section>)}<section class="vps-block"><h2>怎样理解这里的结论？</h2><p>技术规范说明机制，公开项目文档说明支持范围，排查步骤帮助你收集证据；它们都不等于本站对某条节点进行过长期实测。遇到故障先区分事实、可能原因与未知项，软件和服务资格以当前官方说明为准。</p></section></KnowledgeLayout>

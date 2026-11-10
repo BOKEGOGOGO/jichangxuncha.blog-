@@ -1,0 +1,7 @@
+---
+import KnowledgeArticle from '../../components/KnowledgeArticle.astro';
+import {libraryArticles} from '../../data/knowledge-library';
+export function getStaticPaths(){return libraryArticles.map(article=>({params:{slug:article.slug},props:{article}}));}
+const {article}=Astro.props;
+---
+<KnowledgeArticle article={article}/>
