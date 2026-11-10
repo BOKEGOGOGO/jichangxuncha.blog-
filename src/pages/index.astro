@@ -25,7 +25,7 @@ const count = (t) => posts.filter((p) => p.category === t.category).length;
 
     <section class="topics" aria-label="栏目">
       {topics.map((t) => (
-        <a class="topic" href={`/category/${t.slug}/`} data-reveal>
+        <a class="topic" href={t.slug==='vps'?'/catagory/vps/':`/category/${t.slug}/`} data-reveal>
           <div class="topic-top mono"><span>{t.no}</span><span>{count(t)} 篇</span></div>
           <div class="topic-art"><Glyph slug={t.slug}/></div>
           <h2>{t.category}</h2>
@@ -61,18 +61,18 @@ const count = (t) => posts.filter((p) => p.category === t.category).length;
 
     <section class="sec">
       <div class="sec-head"><div class="sec-sticky">
-        <span class="mono">SUBSCRIPTION</span>
-        <h2>你的订阅，顺手管理</h2>
+        <span class="mono">NETWORK TOOLS</span>
+        <h2>先检查，再连接</h2>
       </div></div>
       <div class="sec-body" data-reveal>
-        <a class="tool" href="/subscriptions/">
+        <a class="tool" href="/tools/">
           <div class="tool-flow" aria-hidden="true">
-            <span class="tool-box">订阅链接</span>
+            <span class="tool-box">网页连通</span>
             <i></i>
-            <span class="tool-box">Clash / Shadowrocket</span>
+            <span class="tool-box">下载测速</span>
           </div>
-          <p>整理第三方订阅链接，生成客户端导入入口。链接只在当前页面处理，不上传、不保存。</p>
-          <span class="tool-go">打开订阅工具 <span aria-hidden="true">→</span></span>
+          <p>检查国内与跨境站点响应，测试当前网络的下载速率，帮助排查网页打不开和连接缓慢的问题。</p>
+          <span class="tool-go">打开网络工具箱 <span aria-hidden="true">→</span></span>
         </a>
       </div>
     </section>
@@ -99,7 +99,7 @@ const count = (t) => posts.filter((p) => p.category === t.category).length;
     .hero-sub br{display:none}
   }
 
-  .topics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--ink)}
+  .topics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--ink)}
   .topic{display:block;padding:clamp(20px,2.4vw,32px);border-left:1px solid var(--line);transition:background .2s}
   .topic:first-child{border-left:0;padding-left:0}
   .topic:last-child{padding-right:0}

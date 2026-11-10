@@ -1,0 +1,7 @@
+---
+import { brandDisplay } from '../data/brand-display';
+const {slug,fallback=''}=Astro.props;
+const name=brandDisplay[slug];
+---
+<span class="brand-name"><span class="zh">{name?.zh ?? fallback}</span>{name?.en && <span class="en" lang="en">{name.en}</span>}</span>
+<style>.brand-name,.zh,.en{display:block}.en{font:500 13px/1.6 var(--mono-f);color:var(--muted);letter-spacing:.07em;margin-top:8px}</style>

@@ -1,0 +1,29 @@
+<dialog id="brand-profile-dialog" class="brand-profile-dialog" aria-labelledby="brand-profile-title"><div class="brand-profile-head"><div><span class="mono">BRAND PROFILE</span><h2 id="brand-profile-title">品牌资料</h2></div><button type="button" class="brand-profile-close" aria-label="关闭品牌资料">关闭 <span aria-hidden="true">×</span></button></div><div id="brand-profile-content" class="brand-profile-content"></div></dialog>
+<script>
+const dialog=document.querySelector<HTMLDialogElement>('#brand-profile-dialog')!;
+const content=dialog.querySelector<HTMLElement>('#brand-profile-content')!;
+const title=dialog.querySelector<HTMLElement>('#brand-profile-title')!;
+let opener:HTMLElement|null=null;
+let oldOverflow='';
+document.addEventListener('click',event=>{
+ const target=event.target instanceof Element?event.target.closest<HTMLAnchorElement>('a[data-brand-open]'):null;
+ if(!target||event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+ const source=document.getElementById('dossier-'+target.dataset.brandOpen);
+ if(!source||typeof dialog.showModal!=='function')return;
+ event.preventDefault();
+ const copy=source.cloneNode(true) as HTMLElement;
+ copy.removeAttribute('id');copy.removeAttribute('tabindex');
+ copy.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
+ copy.querySelectorAll('[data-brand-open]').forEach(el=>el.remove());
+ content.replaceChildren(copy);title.textContent=(target.dataset.brandName||'品牌')+' · 完整资料';
+ opener=target;oldOverflow=document.documentElement.style.overflow;document.documentElement.style.overflow='hidden';
+ dialog.showModal();content.scrollTop=0;
+ dialog.querySelector<HTMLButtonElement>('.brand-profile-close')!.focus();
+});
+dialog.querySelector('.brand-profile-close')!.addEventListener('click',()=>dialog.close());
+dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const rect=dialog.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)dialog.close();});
+dialog.addEventListener('close',()=>{document.documentElement.style.overflow=oldOverflow;content.replaceChildren();opener?.focus({preventScroll:true});opener=null;});
+</script>
+<style is:global>
+.brand-profile-dialog{position:fixed;inset:0;margin:auto;width:min(880px,calc(100vw - 36px));max-width:none;max-height:calc(100dvh - 60px);padding:0;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);box-shadow:0 24px 90px #0004;overflow:hidden}.brand-profile-dialog::backdrop{background:#101b17a6;backdrop-filter:blur(3px)}.brand-profile-dialog[open]{display:flex;flex-direction:column;animation:brand-profile-enter .16s ease-out}.brand-profile-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px 28px;border-bottom:1px solid var(--line);flex-shrink:0}.brand-profile-head .mono{font-size:10px;color:var(--accent);letter-spacing:.08em}.brand-profile-head h2{font-size:23px;line-height:1.4;margin:7px 0 0}.brand-profile-close{flex:none;border:1px solid var(--line);padding:9px 14px;min-height:44px;background:transparent;color:var(--ink);font:inherit;font-size:14px;cursor:pointer}.brand-profile-close span{margin-left:10px;font-size:22px}.brand-profile-close:hover{color:var(--accent);border-color:var(--accent)}.brand-profile-content{overflow:auto;overscroll-behavior:contain;padding:28px;min-height:0;scrollbar-gutter:stable}.brand-profile-content .price-dossier{margin:0;padding:0;border:0;max-width:100%}.brand-profile-content h3{font-size:26px;line-height:1.5}.brand-profile-content h4{line-height:1.6}.brand-profile-content p{line-height:1.9}.brand-profile-content .dossier-head{gap:24px}.brand-profile-content .brand-facts{margin-top:22px}.brand-profile-content .pricing-scroll{max-width:100%;overflow-x:auto}.brand-profile-content .official-source{margin-top:22px;font-size:12px;color:var(--muted)}@keyframes brand-profile-enter{from{opacity:0;transform:translateY(12px) scale(.99)}to{opacity:1;transform:none}}@media(max-width:600px){.brand-profile-dialog{width:calc(100vw - 20px);max-height:calc(100dvh - 28px)}.brand-profile-head{padding:16px}.brand-profile-head h2{font-size:20px}.brand-profile-content{padding:20px 16px}.brand-profile-content .dossier-head,.brand-profile-content .brand-facts{grid-template-columns:1fr;gap:16px}.brand-profile-close{padding:6px 10px}}@media(prefers-reduced-motion:reduce){.brand-profile-dialog[open]{animation:none}}
+</style>

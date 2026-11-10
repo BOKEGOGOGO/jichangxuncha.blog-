@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro';
+import {probeTargets} from '../lib/network-check.js';
+---
+<Layout title="网络连通性检测｜检查当前网络与跨境访问" description="从自己的浏览器检测基础连接、国内参照和跨境参照响应，辅助判断当前网络状况，不替代具体机场线路试用。">
+<div class="wrap network-page"><header class="page-head"><a class="mono" href="/category/airports/">← 返回机场推荐</a><span class="mono">CHECK YOUR CONNECTION</span><h1>先测自己的网络。</h1><p>用你当前的设备与网络，检查基础连接、国内参照和跨境参照的响应情况。适合购买前初步排查，也可以切换Wi-Fi、移动数据或当前代理状态后重新比较。</p></header>
+<section class="test-panel" aria-labelledby="test-title"><div class="test-intro"><div><h2 id="test-title">当前网络连通性检测</h2><p>每个目标连续请求3次，每次最多等待8秒。不会读取或要求提供订阅链接、账号、密码、IP地址或位置。</p></div><div class="test-controls"><button id="start-check" type="button">开始检测</button><button id="stop-check" type="button" disabled>停止</button></div></div>
+<p class="test-explanation">检测只有在你点击后开始。浏览器会向下方站点发起少量请求，目标站点会收到正常连接信息；本站不上传或保存检测结果。请保持你打算使用的网络状态，已开代理时结果会包含该代理的影响。</p>
+<noscript><p class="test-explanation">检测需要启用JavaScript。你仍可手动打开下列目标，查看当前浏览器能否访问。</p></noscript>
+<div id="test-summary" class="test-summary" aria-live="polite"><h3 id="summary-title">准备好后，点击开始检测</h3><p id="summary-body">这里只检测浏览器访问响应，不会给出“可以翻墙”或“某机场一定适用”的通用结论。</p><p id="test-progress" class="mono"></p></div>
+<div class="results-scroll"><table><caption>当前浏览器检测结果</caption><thead><tr><th scope="col">检测目标</th><th scope="col">类型</th><th scope="col">状态</th><th scope="col">响应次数</th><th scope="col">请求耗时中位数</th></tr></thead><tbody>{probeTargets.map(t=><tr data-probe={t.id}><th scope="row">{t.name}<small>{t.group==='local'?'当前网站':new URL(t.url).hostname}</small></th><td>{t.group==='local'?'基础连接':t.group==='domestic'?'国内参照':'跨境参照'}</td><td class="probe-status">未开始</td><td class="probe-count">—</td><td class="probe-duration">—</td></tr>)}</tbody></table></div>
+<p class="metric-note">“收到响应”只表示浏览器完成了请求。跨站响应的状态码与内容通常无法读取，不能判断是否是正常页面或拦截页。耗时包含浏览器、连接与站点处理，不是ping、下载速度或丢包率。</p>
+</section>
+<section class="how-to-read"><div><span class="mono">READ THE RESULT</span><h2>测完以后，怎么判断？</h2></div><div class="reading-copy"><h3>基础或国内参照异常</h3><p>先确认本地网络、Wi-Fi认证或浏览器插件状态。某一个目标失败也可能是站点、资源或浏览器策略所致，不直接判断整条网络不可用。</p><h3>国内有响应，跨境没有响应</h3><p>说明本次跨境参照未完成。浏览器检测无法知道某家机场的入口与协议能否连通，也不会因为跨境网站打不开就直接推荐购买。应先向品牌确认你所用网络和设备，再用短周期验证。</p><h3>跨境收到响应</h3><p>当前链路对这些请求有响应，不代表任何目标的全部功能可用。已开代理时，可以记录当前结果，再按自己的实际使用状态重新检测，避免把代理后的结果当成未使用服务时的能力。</p><h3>地区和时段不同，需要重新检测</h3><p>中国大陆不同省市与运营商、其他国家和地区的路由可能不同，晚高峰也可能变化。本站不做一套结果适用于所有人的独立测速排名，建议在自己的常用网络与时段观察。</p><a class="link" href="/category/airports/#brands">结合设备、用量与套餐继续选择 →</a></div></section>
+<section class="manual"><h2>手动核对目标</h2><p>如果自动请求受浏览器限制，可以在新标签直接打开目标主页。网页内容和实际应用仍需你亲自确认。</p><div>{[['百度','https://www.baidu.com/'],['腾讯','https://www.qq.com/'],['Google','https://www.google.com/'],['YouTube','https://www.youtube.com/'],['Wikipedia','https://www.wikipedia.org/']].map(([name,url])=><a href={url} target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">{name} ↗</a>)}</div><p class="method">检测方式参考<a href="https://developer.mozilla.org/en-US/docs/Web/API/Request/mode" target="_blank" rel="noopener noreferrer">浏览器跨站请求说明</a>。本工具不进行机场节点探测，不估算带宽，也不提供地区解锁保证。</p></section>
+</div>
+</Layout>
+<script>
+import {probeTargets,probe,summarizeNetwork} from '../lib/network-check.js';
+const start=document.querySelector<HTMLButtonElement>('#start-check')!;
+const stop=document.querySelector<HTMLButtonElement>('#stop-check')!;
+const title=document.querySelector<HTMLElement>('#summary-title')!;
+const body=document.querySelector<HTMLElement>('#summary-body')!;
+const progress=document.querySelector<HTMLElement>('#test-progress')!;
+let controller:AbortController|null=null;
+let running=false;
+start.addEventListener('click',async()=>{
+ if(running)return;running=true;controller=new AbortController();const signal=controller.signal;
+ start.disabled=true;stop.disabled=false;start.textContent='检测中…';
+ title.textContent='正在从当前浏览器发起检测';body.textContent='请保持此页面打开。切换网络或代理状态后，可以停止并重新检测。';
+ let complete=0;const total=probeTargets.length*3;
+ const rows=probeTargets.map(t=>({...t,samples:[] as {state:string;duration?:number}[]}));
+ const render=()=>{for(const row of rows){const tr=document.querySelector<HTMLElement>('[data-probe="'+row.id+'"]')!;const successes=row.samples.filter(s=>s.state==='response');const durations=successes.map(s=>s.duration!).sort((a,b)=>a-b);const status=tr.querySelector<HTMLElement>('.probe-status')!;status.textContent=row.samples.some(s=>s.state==='cancelled')?'已停止':row.samples.length<3?'检测中…':successes.length===3?'3次均收到响应':successes.length?'部分收到响应':row.samples.every(s=>s.state==='timeout')?'请求超时':'未完成／被拦截';status.dataset.state=successes.length?'response':row.samples.length===3?'incomplete':'running';tr.querySelector('.probe-count')!.textContent=successes.length+'/'+row.samples.length;tr.querySelector('.probe-duration')!.textContent=durations.length?Math.round(durations.length%2?durations[Math.floor(durations.length/2)]:(durations[durations.length/2-1]+durations[durations.length/2])/2)+' ms':'—';}progress.textContent=complete+' / '+total+' 次请求已完成';};
+ render();
+ try{await Promise.all(rows.map(async row=>{for(let i=0;i<3;i++){const result=await probe(row,{signal});row.samples.push(result);complete++;render();if(signal.aborted)break;}}));
+ const summary=signal.aborted?{title:'检测已停止',body:'检测结果不完整。准备好后可重新检测，避免依据部分结果做购买决定。'}:summarizeNetwork(rows);
+ title.textContent=summary.title;body.textContent=summary.body;progress.textContent+=' · '+new Date().toLocaleString('zh-CN');
+ }catch{title.textContent='本次检测未完成';body.textContent='浏览器未能完成检测，可稍后重试或使用下方的手动核对入口。';}
+ finally{running=false;controller=null;start.disabled=false;stop.disabled=true;start.textContent='重新检测';}
+});
+stop.addEventListener('click',()=>{stop.disabled=true;controller?.abort();});
+window.addEventListener('pagehide',()=>controller?.abort());
+</script>
+<style>
+.network-page{padding-bottom:60px}.page-head{max-width:980px}.page-head>a{display:inline-flex;min-height:40px;align-items:center}.page-head h1{font-size:clamp(38px,5vw,68px)}.page-head p{max-width:48em}.test-panel{border-top:1px solid var(--ink)}.test-intro{display:flex;justify-content:space-between;gap:36px;padding:30px 0 20px}.test-intro h2{font-size:24px;margin-bottom:12px}.test-intro p,.test-explanation,.metric-note{font-size:14px;color:var(--muted);line-height:1.9}.test-intro p{max-width:45em}.test-controls{display:flex;gap:12px;flex-shrink:0;align-items:flex-start}button{min-height:48px;padding:10px 22px;background:var(--accent);color:white;border:1px solid var(--accent);font:500 15px var(--head);cursor:pointer}button:disabled{opacity:.45;cursor:default}#stop-check{background:transparent;color:var(--ink);border-color:var(--line)}.test-explanation{max-width:68em;margin-bottom:24px}.test-summary{padding:24px;background:#0b7a5508;border-left:3px solid var(--accent)}.test-summary h3{font-size:22px;margin-bottom:10px}.test-summary p{font-size:15px;line-height:1.9}.test-summary .mono{font-size:12px;margin-top:14px;color:var(--muted)}.results-scroll{overflow-x:auto;margin:28px 0 18px}table{width:100%;min-width:660px;border-collapse:collapse;text-align:left;font-size:14px}caption{text-align:left;font-size:12px;color:var(--muted);margin-bottom:12px}th,td{padding:17px 12px;border-bottom:1px solid var(--line)}th{font-weight:500}thead th{background:#eaf0e8;font-size:12px}tbody th small{display:block;font-size:11px;color:var(--muted);margin-top:4px}[data-state="response"]{color:var(--accent)}.how-to-read{display:grid;grid-template-columns:1fr 2fr;gap:48px;padding:60px 0;border-bottom:1px solid var(--line)}.how-to-read .mono{color:var(--muted)}.how-to-read h2{font-size:28px;margin-top:12px}.reading-copy h3{font-size:21px;margin-bottom:12px}.reading-copy p{font-size:16px;line-height:1.95;margin-bottom:30px}.manual{padding-top:40px}.manual h2{font-size:24px;margin-bottom:14px}.manual p{font-size:14px;color:var(--muted);line-height:1.9}.manual>div{display:flex;flex-wrap:wrap;gap:12px 28px;margin:16px 0}.manual>div a{display:inline-flex;align-items:center;min-height:44px;border-bottom:1px solid var(--line)}.method a{color:var(--accent);text-decoration:underline}.metric-note{max-width:70em}@media(max-width:760px){.test-intro{flex-direction:column;gap:20px}.test-controls{width:100%}.test-controls button{flex:1}.how-to-read{grid-template-columns:1fr;gap:24px}.test-summary{padding:20px}.test-summary h3{font-size:20px}}
+</style>

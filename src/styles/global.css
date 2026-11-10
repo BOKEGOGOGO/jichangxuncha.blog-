@@ -92,3 +92,9 @@ ul,ol{margin:0;padding:0;list-style:none}
   *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
   @view-transition{navigation:none}
 }
+
+/* 常驻故障排查入口：保持清晰可读的绿色发光，不闪烁。 */
+.top nav a.nav-troubleshoot{padding:0 13px;min-height:40px;align-self:center;color:#075d40;background:#e6f4eb;border:1px solid #84caa1;border-radius:4px;box-shadow:0 0 13px #1583542b,inset 0 0 9px #ffffff9c;text-shadow:0 0 9px #73c99566;font-weight:500}
+.top nav a.nav-troubleshoot:hover,.top nav a.nav-troubleshoot:focus-visible{color:#044b33;background:#d9efdf;border-color:#368f60;box-shadow:0 0 18px #15835452}
+.top nav a.nav-troubleshoot[aria-current]::after{left:12px;right:12px;bottom:4px;background:#177b50}
+@media(max-width:420px){.top nav a.nav-troubleshoot{padding:0 9px}}

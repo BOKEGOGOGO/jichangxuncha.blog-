@@ -1,0 +1,10 @@
+---
+import VpsLayout from '../../../layouts/VpsLayout.astro';
+import {vpsProviders,verifiedDate} from '../../../data/vps';
+export function getStaticPaths(){return vpsProviders.map(provider=>({params:{slug:provider.slug},props:{provider}}));}
+const {provider:p}=Astro.props;
+---
+<VpsLayout title={p.name+' VPS选购资料｜配置、地区、费用与注意事项'} description={'核对'+p.name+'的产品定位、机房地区与费用构成，区分官方参数、未核实价格和未测试线路，购买前了解自管理责任。'} crumbs={[{name:'VPS推荐',href:'/catagory/vps/'},{name:'商家目录',href:'/vps/providers/'},{name:p.name,href:'/vps/providers/'+p.slug+'/'}]}>
+<header class="page-head"><span class="vps-kicker mono">PROVIDER / OFFICIAL DATA</span><h1>{p.name}<br/>产品与选购资料</h1><p>{p.subtitle}</p><p class="vps-source">官方页面核对：{verifiedDate} · 不含独立性能测试 · 普通官网入口</p></header>
+<div class="vps-provider-detail"><aside><h2>购买前先看</h2><p>{p.caution}。</p><div class="vps-actions"><a class="vps-button" href={p.purchase} target="_blank" rel="noopener noreferrer">官方产品页 ↗</a><a class="vps-link" href={p.website} target="_blank" rel="noopener noreferrer">官方网站 ↗</a></div></aside><div class="vps-prose"><h2>当前已核对的资料</h2><div class="vps-table-scroll" tabindex="0" role="region" aria-label={p.name+'规格与验证状态'}><table><tbody>{[['产品',p.product],['类型',p.type],['地区',p.regions],['标价',p.price+'；'+p.priceDetail],['CPU',p.cpu],['内存',p.ram],['存储',p.disk],['流量',p.transfer],['带宽',p.bandwidth],['线路',p.network],['适用场景',p.fit],['验证状态',p.verified]].map(([k,v])=><tr><th scope="row">{k}</th><td>{v}</td></tr>)}</tbody></table></div>{p.sections.map((section,i)=><section><h2>{section.title}</h2>{section.paragraphs.map(text=><p>{text}</p>)}</section>)}<section><h2>官方资料来源</h2><p>只核对页面可见说明，来源之间的地区、产品与计费范围要对应，不能把品牌宣传直接写成本站实测。</p><ul class="vps-sources">{p.sources.map(s=><li><a href={s.url} target="_blank" rel="noopener noreferrer">{s.label} ↗</a></li>)}</ul></section><section><h2>继续核对自己的需求</h2><div class="vps-related"><a href="/vps/guides/how-to-choose-vps/">配置与成本清单 →</a><a href="/vps/guides/regions-and-routing/">机房与线路选择 →</a><a href="/vps/guides/ssh-connection/">首次SSH连接 →</a></div></section></div></div>
+</VpsLayout>

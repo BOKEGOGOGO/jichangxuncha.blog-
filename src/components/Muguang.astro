@@ -1,0 +1,22 @@
+---
+import BrandActions from './BrandActions.astro';
+import { muguang as b } from '../data/muguang';
+const periodic=b.pricing.filter(p=>p.couponEligible);
+const other=b.pricing.filter(p=>!p.couponEligible);
+---
+<div class="muguang">
+<p class="source">资料来源：品牌官方提供资料 · 整理于2026-11-09。以下产品参数与支持范围均为资料声明，本站未进行独立测速、付款或优惠验证。</p>
+<nav class="toc" aria-label="暮光资料目录"><a href="#mg-prices">套餐价格</a><a href="#mg-coupon">优惠码</a><a href="#mg-network">线路与兼容</a><a href="#mg-notes">注意事项</a></nav>
+<section><h2>暮光加速是什么？</h2><p>暮光加速提供Shadowsocks协议节点服务，资料描述其架构为BGP多线路智能调度与“专线级出口”，全节点1×计费倍率，不限制同时在线设备数量。“专线级”是品牌措辞，不能直接等同于已核实的IPLC或IEPL承载。</p><p>套餐从70 GB/月的年付轻量版，到120、240、700、1500 GB/月的常规方案，另有三档固定总量流量包与500 GB/月独享定制节点。适合希望按流量需求和付款周期细分预算的用户。</p></section>
+<section id="mg-prices"><h2>常规套餐：六种周期价格</h2><p>下表为资料中的未优惠标价。流量均按月列示，付款周期不等于一次发放全部周期流量；流量重置日、结转与退款规则仍需购买前确认。</p><div class="table-scroll"><table><caption>暮光四档周期套餐价格表</caption><thead><tr><th>套餐</th><th>月流量</th><th>付款周期</th><th>标价</th><th>mm88折后计算值</th></tr></thead><tbody>{periodic.map(p=><tr><td>{p.name.replace('暮光 · ','')}</td><td>{p.traffic}</td><td>{p.period}</td><td>{p.originalPrice}</td><td>¥{(Number(p.originalPrice.replace('¥',''))*.8).toFixed(2)}</td></tr>)}</tbody></table></div><p class="source">折后金额仅按资料所述8折计算，不代表结算验证，实付与优惠适用条件以购买页为准。</p></section>
+<section><h2>年付轻量版、不限时包与独享定制</h2><div class="table-scroll"><table><thead><tr><th>套餐</th><th>流量</th><th>周期</th><th>标价</th></tr></thead><tbody>{other.map(p=><tr><td>{p.name}</td><td>{p.traffic}</td><td>{p.period}</td><td>{p.originalPrice}</td></tr>)}</tbody></table></div><p>不限时不等于无限流量：150、400、800 GB均为一次购买的固定总量，用完为止。年付轻量版为70 GB/月、¥109/年，不应将¥109理解为月付价格。</p><p>独享私人定制节点按资料为500 GB/月、¥680/月，声明提供独享带宽与独立公网IP，定位于直播、独立站与跨境业务。资料给出的交付时间约2—3个工作日，实际交付、IP地区和业务适配需下单前确认。</p></section>
+<section id="mg-coupon"><h2>mm88优惠码：8折与排除范围</h2><p><code>mm88</code>适用于基础、标准、旗舰、至尊四档的资料所列常规周期。年付轻量版、三款不限时包、独享私人定制节点不参加。不因文件中的“已验证”标记而声称本站已完成验证；首单、续费、每账号次数和时效未在资料中完整说明，需在结算前确认。</p><p>资料未提供其他可靠限时优惠，本页不添加额外折扣或倒计时。</p></section>
+<section id="mg-network"><h2>线路、协议与客户端兼容性</h2><p>协议为Shadowsocks，架构为BGP多线路智能调度与专线级出口。资料标注全程不限速、不限同时在线设备数，这些声明不代表任何接入网络都能达到同一速度，也不等于流量无限。</p><p>具体节点地区与数量、客户端名单、订阅格式、各系统及软路由兼容性未提供。即使协议名称相同，也应核对订阅格式与客户端支持；本页不直接承诺Clash、Shadowrocket或其他工具可导入。</p><h3>流媒体与AI支持声明</h3><p>资料列出{b.streamingSupport.join('、')}及{b.aiSupport.join('、')}。4K／8K描述为品牌产品口径，未附可复查的本站测试；实际访问还受平台账号、地区、节点与使用时间影响。</p></section>
+<section><h2>流量重置包</h2><div class="table-scroll"><table><thead><tr><th>对应套餐</th><th>资料列示重置价格</th></tr></thead><tbody>{b.resetPackages.map(p=><tr><td>{p.plan}</td><td>¥{p.price}</td></tr>)}</tbody></table></div><p>重置包是否立即生效、影响哪些计费周期或余额，资料未完整说明，应在购买前查看相应条款。</p></section>
+<section id="mg-notes"><h2>购买前注意与资料冲突</h2><ul><li>标准版采用240 GB/月。官方资料说明旧详情曾出现300 GB，本页不把旧文案作为当前额度。</li><li>独享节点采用¥680/月。文件指出旧公开资料曾出现¥600，本站未独立检查实时结算。</li><li>退款、流量结转、客户端名单、节点地区与最新优惠条件待确认。</li><li>“不限速”“流媒体支持”和专线级出口属于资料声明，不是本站性能保证。</li></ul></section>
+<section><h2>暮光加速常见问题</h2><h3>基础版多少钱？</h3><p>120 GB/月，月付¥20、季付¥57、半年付¥103、年付¥204、两年付¥384、三年付¥540，均为资料标价。</p><h3>标准版是240 GB还是300 GB？</h3><p>采用用户文件中的240 GB/月；文件说明300 GB来自旧详情残留，实时套餐仍需以购买页为准。</p><h3>可以用Clash或小火箭吗？</h3><p>资料只确认Shadowsocks协议，没有提供客户端与订阅格式清单，需先向服务方确认，不能直接推断兼容。</p><h3>优惠码能用于不限时套餐吗？</h3><p>不能，资料将年付轻量版、三档不限时包和独享节点列为mm88排除套餐。</p></section>
+<BrandActions slug="muguang"/>
+</div>
+<style>
+.muguang{min-width:0}.source{font-size:13px!important;color:var(--muted)}.toc{display:flex;flex-wrap:wrap;gap:12px 24px;margin:24px 0}.toc a{min-height:40px;display:flex;align-items:center;border-bottom:1px solid var(--line)}section{margin:36px 0;padding-top:24px;border-top:1px solid var(--line);scroll-margin-top:90px}h2{font-size:26px;margin-bottom:16px}h3{font-size:20px;margin:24px 0 12px}p{margin-bottom:18px;line-height:1.95}.table-scroll{max-width:100%;overflow-x:auto;margin:24px 0}table{border-collapse:collapse;width:100%;min-width:540px;font-size:14px}th,td{padding:12px 10px;text-align:left;border-bottom:1px solid var(--line)}th{font-weight:500;color:var(--muted)}caption{text-align:left;margin-bottom:12px;font-size:13px;color:var(--muted)}ul{list-style:disc;padding-left:22px}li{margin:12px 0}code{font-family:var(--mono-f);color:var(--accent)}.purchase{padding:24px;background:#0b7a5509;margin-top:32px}.purchase>a{display:inline-flex;align-items:center;min-height:48px;padding:10px 18px;background:var(--accent);color:white}.purchase p{margin:16px 0 0}@media(max-width:700px){h2{font-size:23px}}
+</style>

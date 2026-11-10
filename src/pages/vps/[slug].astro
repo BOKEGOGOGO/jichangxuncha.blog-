@@ -1,0 +1,7 @@
+---
+import VpsKnowledgeArticle from '../../components/VpsKnowledgeArticle.astro';
+import {knowledgeArticles} from '../../data/vps-knowledge';
+export function getStaticPaths(){return knowledgeArticles.filter(a=>!a.path.startsWith('/vps/guides/')).map(article=>({params:{slug:article.slug},props:{article}}));}
+const {article}=Astro.props;
+---
+<VpsKnowledgeArticle article={article}/>

@@ -1,0 +1,10 @@
+---
+import Layout from './Layout.astro';
+import VpsSeo from '../components/VpsSeo.astro';
+import '../styles/vps.css';
+const {title,description,path=Astro.url.pathname,kind='WebPage',crumbs=[{name:'VPS知识',href:'/catagory/vps/'}],faqs=[]}=Astro.props;
+---
+<Layout title={title} description={description} canonicalPath={path} seo>
+<VpsSeo slot="seo" title={title} description={description} path={path} kind={kind} crumbs={crumbs} faqs={faqs}/>
+<div class="vps"><div class="wrap"><nav class="vps-nav" aria-label="VPS专题导航"><a class="vps-wordmark" href="/catagory/vps/">VPS / 服务器知识中心</a><div><a href="/catagory/vps/">专题首页</a><a href="/vps/guides/">文章目录</a></div></nav><slot/></div></div>
+</Layout>

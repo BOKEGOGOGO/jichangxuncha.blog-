@@ -5,13 +5,13 @@ import '../styles/global.css';
 import Loader from '../components/Loader.astro';
 import Mark from '../components/Mark.astro';
 
-const { title = '机场巡查博客', description = '机场推荐、VPS 与订阅使用笔记。' } = Astro.props;
+const { title = '机场巡查博客', description = '机场推荐、VPS 与订阅使用笔记。', seo = false, canonicalPath } = Astro.props;
 const path = Astro.url.pathname;
 const nav = [
   { label: '机场推荐', href: '/category/airports/' },
-  { label: 'VPS', href: '/category/vps/' },
-  { label: '一元机场', href: '/category/budget/' },
-  { label: '订阅工具', href: '/subscriptions/' },
+  { label: 'VPS知识', href: '/catagory/vps/' },
+  { label: 'Clash', href: '/category/clash/' },
+  { label: '节点全超时？', href: '/tools/#diagnose' },
 ];
 ---
 <!doctype html>
@@ -21,9 +21,12 @@ const nav = [
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="description" content={description}/>
     <meta name="theme-color" content="#F6F6F3"/>
-    <link rel="icon" href="/favicon.svg"/>
-    <link rel="canonical" href={new URL(path, Astro.site)}/>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2"/>
+    <link rel="icon" sizes="32x32" type="image/png" href="/favicon-32.png?v=2"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+    <link rel="canonical" href={new URL(canonicalPath ?? path, Astro.site)}/>
     <title>{title} · jichangxuncha.blog</title>
+    {seo && <slot name="seo"/>}
     <script is:inline>
       // 一次会话只看一次 loading；地址加 ?loader 可以强制重看。
       (function () {
@@ -45,7 +48,7 @@ const nav = [
       <div class="wrap top-in">
         <a class="brand" href="/" aria-label="机场巡查首页"><Mark/><span>机场巡查</span></a>
         <nav aria-label="主导航">
-          {nav.map((n) => <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>)}
+          {nav.map((n) => <a href={n.href} class:list={{'nav-troubleshoot':n.href.startsWith('/tools/')}} title={n.href.startsWith('/tools/')?'套餐已购买，节点却全部超时或报错？先排查网络与连接问题':undefined} aria-current={(path.startsWith(n.href.split('#')[0]) || n.href === '/catagory/vps/' && (path.startsWith('/vps/') || path === '/category/vps/')) ? 'page' : undefined}>{n.label}</a>)}
         </nav>
       </div>
     </header>

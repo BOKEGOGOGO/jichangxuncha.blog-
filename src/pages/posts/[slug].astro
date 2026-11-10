@@ -1,11 +1,17 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import BrandDossier from '../../components/BrandDossier.astro';
+import { additionalBrands } from '../../data/additional-brands';
+import Feimao from '../../components/Feimao.astro';
+import Weifeng from '../../components/Weifeng.astro';
+import Muguang from '../../components/Muguang.astro';
 import FlyV from '../../components/FlyV.astro';
 import Glyph from '../../components/Glyph.astro';
 import { posts } from '../../data/posts';
 import { topicOf } from '../../data/site';
 export function getStaticPaths() { return posts.map((post) => ({ params: { slug: post.slug }, props: { post } })); }
 const { post } = Astro.props;
+const brand = additionalBrands.find(b=>b.slug===post.slug);
 const topic = topicOf(post.category);
 const next = posts[(posts.indexOf(post) + 1) % posts.length];
 // “看线路：……”这样的段落拆成小标题和正文
@@ -18,7 +24,7 @@ const blocks = post.body.map((t) => {
   <div class="bar" id="progress" aria-hidden="true"></div>
   <article class="wrap">
     <header class="page-head">
-      <a class="mono" href={`/category/${topic.slug}/`}>← {post.category}</a>
+      <a class="mono" href={topic.slug==='vps'?'/catagory/vps/':`/category/${topic.slug}/`}>← {post.category}</a>
       <h1>{post.title}</h1>
     </header>
     <div class="sec art">
@@ -32,7 +38,8 @@ const blocks = post.body.map((t) => {
       </div></aside>
       <div class="sec-body flow">
         <p class="lede">{post.description}</p>
-        {post.slug === 'flyv' ? <FlyV/> : blocks.map((b) => b.head
+        {post.category === '机场推荐' && <div class="brand-network-check"><p>校园网、办公网与家庭宽带的连接条件可能不同。购买或排查节点问题前，先结合你的网络环境查看建议。</p><a href="/tools/#diagnose">检查我的网络是否限制代理 →</a></div>}
+        {post.slug === 'flyv' ? <FlyV/> : post.slug === 'muguang' ? <Muguang/> : post.slug === 'weifeng' ? <Weifeng/> : post.slug === 'feimao' ? <Feimao/> : brand ? <BrandDossier brand={brand}/> : blocks.map((b) => b.head
           ? <section><h2>{b.head}</h2><p>{b.text}</p></section>
           : <p>{b.text}</p>)}
       </div>
@@ -51,6 +58,7 @@ const blocks = post.body.map((t) => {
   .art-glyph{width:96px;margin-bottom:24px}
   dl{display:grid;grid-template-columns:48px 1fr;gap:4px 0;margin:0;color:var(--muted)}
   dd{margin:0;color:var(--ink)}
+  .brand-network-check{padding:20px 24px;margin-bottom:28px;border-left:2px solid var(--accent);background:#0b7a5508}.flow .brand-network-check p{font-size:14px;margin-bottom:10px}.brand-network-check a{display:inline-block;padding:8px 0;border-bottom:1px solid var(--accent);color:var(--accent);font-size:15px}
   .flow{max-width:42em}
   .lede{font:500 clamp(20px,2vw,26px)/1.5 var(--head);margin-bottom:32px}
   .flow p{font-size:17px;line-height:1.9;margin-bottom:1.2em}

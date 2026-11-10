@@ -1,0 +1,7 @@
+---
+import VpsLayout from '../../../layouts/VpsLayout.astro';
+import {knowledgeGroups,knowledgeBySlug} from '../../../data/vps-knowledge';
+---
+<VpsLayout title="VPS文章目录｜按基础、地区、成本与故障查找教程" description="浏览VPS知识文章目录，按基础入门、方案成本、地区线路和故障排查寻找具体教程，保留旧文章地址并避免重复专题。" kind="CollectionPage" crumbs={[{name:'VPS知识中心',href:'/catagory/vps/'},{name:'文章目录',href:'/vps/guides/'}]}>
+<header class="page-head"><span class="vps-kicker mono">KNOWLEDGE / INDEX</span><h1>VPS知识文章目录</h1><p>按当前任务进入专题：先理解概念，再选择资源；已经连接失败，直接从错误范围和阶段开始。</p></header>{knowledgeGroups.map(g=><section class="vps-block"><h2>{g.title}</h2><p>{g.summary}</p><div class="vps-article-list">{g.slugs.map(slug=>{const a=knowledgeBySlug(slug);return <a href={a.path}><span class="mono">→</span><div><h3>{a.title}</h3><p>{a.description}</p></div></a>})}</div></section>)}<p class="vps-source">原有<a href="/vps/providers/">服务商资料档案</a>保留供核对产品说明，不构成本站性能榜单；本知识系统不新增品牌或AFF。</p>
+</VpsLayout>

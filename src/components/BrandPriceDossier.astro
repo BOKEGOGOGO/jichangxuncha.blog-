@@ -1,0 +1,61 @@
+---
+import BrandName from './BrandName.astro';
+import BrandActions from './BrandActions.astro';
+import { brandCatalog,pricePeriods } from '../data/brand-catalog';
+import { privateSubscriptionNote } from '../data/brand-overview';
+const money=p=>(p.approximate?'约':'')+'¥'+p.price.toLocaleString('zh-CN',{maximumFractionDigits:2});
+const discount=(p,b)=>b.couponActive&&p.eligible ? (p.approximate?'约':'')+'¥'+(p.price*b.rate).toLocaleString('zh-CN',{maximumFractionDigits:2}):null;
+const clean=s=>(s??'').replace(/(?:用户|来源文件|来源|文件|资料整理者)(?:提供|中的|中|说明|记录|记载|称|写明|写)?/g,'官方资料').replace(/manualActive/g,'历史活动标记');
+---
+<div class="brand-index-slot"><nav class="brand-index" aria-label="完整品牌资料目录">{brandCatalog.map(b=><a href={'#dossier-'+b.slug}>{b.zh}</a>)}</nav></div>
+{brandCatalog.map((b,i)=><article class="price-dossier" id={'dossier-'+b.slug} tabindex="-1">
+<header class="dossier-head"><div><span class="mono">{String(i+1).padStart(2,'0')} / OFFICIAL BRAND INFORMATION</span><h3><BrandName slug={b.slug}/></h3></div><p>{b.advantage}</p></header>
+<dl class="brand-facts"><div><dt>线路与计费</dt><dd>{b.architecture}</dd></div><div><dt>使用方式</dt><dd>{clean(b.usage)}</dd></div></dl>
+<section class="price-chart" aria-label={b.zh+'可月付套餐标价图表'}><div class="chart-title"><h4>月付档位一览</h4><span>可月付方案原价 · 元/月</span></div><p class="chart-note">只对比本品牌可月付的常规方案，年付专享、一次性包及定制见下方完整表格。</p><ul>{b.monthly.map(p=><li><div class="bar-label"><span>{p.name}</span><small>{p.traffic}</small></div><div class="bar-track" aria-hidden="true"><span style={'width:'+Math.max(p.price/b.chartMax*100,2)+'%'}></span></div><strong>{money(p)}</strong></li>)}</ul></section>
+<section class="full-pricing"><h4>完整周期套餐价格表</h4><p class="table-note">金额为对应周期的付款总额。第二行“优惠计算”仅供符合条件的订单参考；“—”表示该套餐不支持此付款方式。</p><div class="pricing-scroll" tabindex="0" role="region" aria-label={b.zh+'完整周期价格表，可左右滚动'}><table><caption>{b.zh} · 周期套餐原价与条件优惠</caption><thead><tr><th scope="col">套餐</th><th scope="col">流量</th>{pricePeriods.map(period=><th scope="col">{period}</th>)}</tr></thead><tbody>{b.groups.map(group=><tr><th scope="row">{group.name}</th><td>{group.traffic}</td>{pricePeriods.map(period=>{const p=group.periods[period];const offer=p?discount(p,b):null;return <td>{p?<><span class="original-price">{money(p)}</span>{offer&&<small class="offer-price">优惠计算 {offer}</small>}</>:<span class="missing" aria-label="不支持此付款方式" title="不支持此付款方式">—</span>}</td>;})}</tr>)}</tbody></table></div>
+{b.oneTime.length>0&&<><h4 class="one-time-head">一次性流量包价格表</h4><div class="pricing-scroll" tabindex="0" role="region" aria-label={b.zh+'一次性流量包价格表'}><table class="one-time"><caption>{b.zh} · 一次性固定总量</caption><thead><tr><th scope="col">套餐</th><th scope="col">总流量</th><th scope="col">一次性标价</th><th scope="col">条件优惠计算</th></tr></thead><tbody>{b.oneTime.map(p=><tr><th scope="row">{p.name}</th><td>{p.traffic}</td><td>{money(p)}</td><td>{discount(p,b)??'不适用／无当前优惠'}</td></tr>)}</tbody></table></div><p class="table-note">一次性流量按总量使用，不是每月额度；有效期与设备数按对应套餐官方规则确认。</p></>}
+</section>
+<aside class="coupon-rule"><span class="mono">{b.couponActive?'COUPON / 优惠规则':'PROMOTION / 活动状态'}</span><h4>{b.couponActive?b.coupon:'暂无已确认有效优惠'}</h4><p>{clean(b.couponText)}</p></aside>
+{b.notes.length>0&&<ul class="product-notes">{b.notes.map(n=><li>{n}</li>)}</ul>}
+<div class="service-notes"><section><h4>流媒体与AI使用范围</h4><p>{clean(b.support)} 产品支持说明不等于持续可用保证，本站没有以合作关系代替独立测试。</p></section><section><h4>私人订阅申请</h4><p>{privateSubscriptionNote}</p></section></div>
+<BrandActions slug={b.slug}/><p class="official-source">资料来源：{b.source} 整理日期：<time datetime="2026-11-09">2026-11-09</time>。</p>
+</article>)}
+<style>
+.brand-index-slot{min-height:62px}.brand-index{position:relative;top:auto;z-index:30;display:flex;flex-wrap:nowrap;gap:8px 22px;padding:10px 0;background:var(--paper);border-bottom:1px solid var(--line);overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;isolation:isolate}.brand-index.is-pinned{position:fixed;left:var(--brand-nav-left,0px);width:var(--brand-nav-width,100%);top:var(--brand-nav-top,64px);z-index:30;display:flex;flex-wrap:nowrap;gap:8px 22px;padding:10px 0;background:var(--paper);border-bottom:1px solid var(--line);overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;isolation:isolate}.brand-index a{flex:none;white-space:nowrap}.brand-index a[aria-current="location"]{color:var(--accent);border-color:var(--accent)}.brand-index a{display:inline-flex;align-items:center;min-height:40px;color:var(--muted);border-bottom:1px solid var(--line);font-size:14px}.brand-index a:hover{color:var(--accent)}.price-dossier{padding:44px 0 52px;border-top:1px solid var(--ink);scroll-margin-top:calc(var(--brand-nav-top,64px) + var(--brand-nav-height,62px) + 16px)}.dossier-head{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;margin-bottom:26px}.dossier-head .mono{color:var(--accent);font-size:11px}.dossier-head h3{font-size:36px;margin-top:12px;line-height:1.4}.dossier-head p{font-size:17px;line-height:1.9;max-width:36em}.brand-facts{display:grid;grid-template-columns:1fr 2fr;gap:28px;margin:0 0 32px;padding:22px 0;border-block:1px solid var(--line)}dt{font-size:12px;color:var(--muted);margin-bottom:8px}dd{margin:0;font-size:14px;line-height:1.9}.price-chart{background:#0b7a5506;padding:24px 28px;border-left:2px solid var(--accent);margin:28px 0 36px}.chart-title{display:flex;align-items:baseline;justify-content:space-between;gap:12px}.chart-title>span,.chart-note{font-size:12px;color:var(--muted)}h4{font-size:19px;font-weight:500;line-height:1.5;margin:0 0 12px}.chart-note{margin-bottom:18px}.price-chart li{display:grid;grid-template-columns:180px minmax(40px,1fr) 90px;gap:18px;align-items:center;margin-top:14px}.bar-label{font-size:14px}.bar-label small{display:block;font-size:11px;color:var(--muted)}.bar-track{height:9px;background:#dfe7de}.bar-track>span{display:block;height:100%;background:var(--accent)}.price-chart strong{font:500 14px var(--mono-f);text-align:right}.table-note{font-size:13px;color:var(--muted);line-height:1.9;margin:0 0 16px}.pricing-scroll{overflow-x:auto;max-width:100%;margin:18px 0 8px}.pricing-scroll:focus-visible{outline:2px solid var(--accent);outline-offset:4px}table{width:100%;min-width:900px;border-collapse:collapse;font-size:13px;line-height:1.7}caption{text-align:left;padding-bottom:12px;font-size:12px;color:var(--muted)}th,td{text-align:left;padding:16px 12px;border-bottom:1px solid var(--line);vertical-align:top}thead th{font-weight:500;background:#eaf0e8;white-space:nowrap}tbody th{font-weight:500;min-width:140px}tbody tr:hover{background:#0b7a5504}.original-price{display:block;white-space:nowrap}.offer-price{display:block;font-size:11px;color:var(--accent);white-space:nowrap;margin-top:5px}.missing{color:#8b918b}.one-time-head{margin-top:30px}table.one-time{min-width:580px}.coupon-rule{margin:26px 0 22px;padding:20px 24px;background:var(--ink);color:var(--paper)}.coupon-rule .mono{font-size:10px;color:#a7c9b6}.coupon-rule h4{margin:8px 0 10px;font-family:var(--mono-f);font-size:20px;color:#70d5a8}.coupon-rule p{font-size:14px;line-height:1.9}.product-notes{list-style:disc;margin:18px 0;padding-left:20px}.product-notes li{font-size:14px;line-height:1.9;padding:5px 0}.service-notes{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin:30px 0}.service-notes h4{font-size:16px}.service-notes p{font-size:14px;line-height:1.9;color:var(--muted)}.official-source{font-size:12px;line-height:1.9;color:var(--muted);margin-top:20px}@media(max-width:760px){.dossier-head,.brand-facts,.service-notes{grid-template-columns:1fr;gap:20px}.dossier-head h3{font-size:30px}.price-chart{padding:20px 16px}.chart-title{display:block}.price-chart li{grid-template-columns:105px minmax(30px,1fr) 70px;gap:10px}.bar-label{font-size:12px}.price-chart strong{font-size:12px}.price-dossier{scroll-margin-top:20px}}
+</style>
+<script>
+const brandNav=document.querySelector<HTMLElement>('.brand-index');
+const navSlot=document.querySelector<HTMLElement>('.brand-index-slot');
+const dossierRoot=document.querySelector<HTMLElement>('#brand-details');
+if(brandNav&&navSlot&&dossierRoot){
+ const header=document.querySelector<HTMLElement>('.top');
+ const links=Array.from(brandNav.querySelectorAll<HTMLAnchorElement>('a[href^="#dossier-"]'));
+ const panels=links.map(link=>document.getElementById(link.hash.slice(1))).filter((panel):panel is HTMLElement=>!!panel);
+ const headerHeight=()=>header&&getComputedStyle(header).position==='sticky'?header.getBoundingClientRect().height:0;
+ const syncPin=()=>{
+  const top=headerHeight(),slot=navSlot.getBoundingClientRect(),height=brandNav.getBoundingClientRect().height;
+  dossierRoot.style.setProperty('--brand-nav-top',top+'px');
+  dossierRoot.style.setProperty('--brand-nav-height',height+'px');
+  dossierRoot.style.setProperty('--brand-nav-left',slot.left+'px');
+  dossierRoot.style.setProperty('--brand-nav-width',slot.width+'px');
+  navSlot.style.height=height+'px';
+  const pinned=slot.top<=top&&dossierRoot.getBoundingClientRect().bottom>top+height;
+  brandNav.classList.toggle('is-pinned',pinned);
+ };
+ const setActive=(id:string)=>links.forEach(link=>{if(link.hash==='#'+id)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');});
+ let pending=false;
+ const update=()=>{pending=false;syncPin();const threshold=headerHeight()+brandNav.getBoundingClientRect().height+28;let active=panels[0];for(const panel of panels){if(panel.getBoundingClientRect().top<=threshold)active=panel;else break;}if(active)setActive(active.id);};
+ const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(update);}};
+ links.forEach(link=>link.addEventListener('click',event=>{
+  if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||event.button!==0)return;
+  const panel=document.getElementById(link.hash.slice(1));if(!panel)return;
+  event.preventDefault();syncPin();
+  const target=panel.getBoundingClientRect().top+window.scrollY-headerHeight()-brandNav.getBoundingClientRect().height-16;
+  window.history.replaceState(null,'',link.hash);panel.focus({preventScroll:true});
+  window.scrollTo({top:Math.max(0,target),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});setActive(panel.id);
+ }));
+ const observer=new ResizeObserver(schedule);observer.observe(brandNav);observer.observe(navSlot);if(header)observer.observe(header);
+ window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);
+ window.addEventListener('load',schedule,{once:true});update();
+}
+</script>

@@ -1,0 +1,5 @@
+import {analyzeEnvironment} from '../lib/toolbox-diagnosis.js';
+const form=document.querySelector<HTMLFormElement>('#diagnosis-form')!;
+const result=document.querySelector<HTMLElement>('#diagnosis-result')!;
+form.addEventListener('submit',event=>{event.preventDefault();const value=(id:string)=>(document.getElementById(id) as HTMLSelectElement).value;const analysis=analyzeEnvironment({kind:value('network-kind'),direct:value('direct-state'),nodes:value('node-state'),compare:value('compare-state'),subscription:value('subscription-state'),policy:value('policy-state')});const heading=document.createElement('h3');heading.textContent=analysis.title;const list=document.createElement('ul');for(const tip of analysis.tips){const item=document.createElement('li');item.textContent=tip;list.append(item);}result.replaceChildren(heading,list);});
+form.addEventListener('reset',()=>{const heading=document.createElement('h3');heading.textContent='选择已清空';const p=document.createElement('p');p.textContent='请按当前网络与实际观察重新填写，未测试的项目保留不确定。';result.replaceChildren(heading,p);});

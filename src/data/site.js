@@ -2,7 +2,6 @@
 export const topics = [
   { no: '01', slug: 'airports', category: '机场推荐', desc: '线路体验与选购笔记' },
   { no: '02', slug: 'vps', category: 'VPS', desc: '服务器与部署记录' },
-  { no: '03', slug: 'budget', category: '一元机场', desc: '低预算套餐观察' },
 ];
 
 export const topicOf = (category) => topics.find((t) => t.category === category) ?? topics[0];

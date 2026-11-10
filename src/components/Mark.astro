@@ -1,8 +1,5 @@
 ---
-// 站标：一列点是墙，一条线从缺口穿过。
-const { size = 28 } = Astro.props;
+const {size=34}=Astro.props;
 ---
-<svg class="mark" width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
-  <g fill="currentColor"><circle cx="12" cy="2.5" r="1.7"/><circle cx="12" cy="7" r="1.7"/><circle cx="12" cy="17" r="1.7"/><circle cx="12" cy="21.5" r="1.7"/></g>
-  <path d="M2 12h20" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round"/>
-</svg>
+<svg class="mark" width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#0B7A55"/><path d="M43 14a23 23 0 1 0 9 29" fill="none" stroke="#F6F6F3" stroke-width="3.5" stroke-linecap="round"/><path d="m18 31 29-12-12 29-6-12z" fill="#F6F6F3"/><path d="m29 36 12-12" fill="none" stroke="#0B7A55" stroke-width="2.2" stroke-linecap="round"/><circle cx="50" cy="47" r="6" fill="#9AE2BF" stroke="#0B7A55" stroke-width="3"/></svg>
+<style>.mark{display:block;flex:none}</style>
