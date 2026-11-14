@@ -1,0 +1,7 @@
+---
+import SiteInfoPage from '../components/SiteInfoPage.astro';
+import {siteInfoPages} from '../data/site-info';
+export function getStaticPaths(){return siteInfoPages.filter(p=>p.slug!=='about').map(page=>({params:{info:page.slug},props:{page}}));}
+const {page}=Astro.props;
+---
+<SiteInfoPage page={page}/>

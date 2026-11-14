@@ -1,0 +1,19 @@
+---
+// 旧地址 /register/aff/品牌/ 转到新的确认页 /register/品牌/。只跳到站内确认页，不会直接打开推广链接。
+import { brandOverview } from '../../../data/brand-overview';
+export function getStaticPaths() {
+  return brandOverview.filter((b) => b.affiliate).map((b) => ({ params: { slug: b.slug } }));
+}
+const target = `/register/${Astro.params.slug}/`;
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="robots" content="noindex,nofollow"/>
+    <meta http-equiv="refresh" content={`0;url=${target}`}/>
+    <link rel="canonical" href={new URL(target, Astro.site)}/>
+    <title>页面已移动 · 机场巡查</title>
+  </head>
+  <body><p>页面已移动到 <a href={target}>{target}</a>。</p></body>
+</html>

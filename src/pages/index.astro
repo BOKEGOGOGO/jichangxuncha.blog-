@@ -5,33 +5,102 @@ import Glyph from '../components/Glyph.astro';
 import PostList from '../components/PostList.astro';
 import { posts } from '../data/posts';
 import { topics } from '../data/site';
+import { knowledgeArticles } from '../data/vps-knowledge';
 
-// 清单直接取自第一篇文章，改文章这里就跟着变。
-const guide = posts[0];
-const checks = guide.body.filter((t) => t.startsWith('看')).map((t) => t.split('：'));
-const count = (t) => posts.filter((p) => p.category === t.category).length;
+// 首页清单是通用选购要点，摘自机场推荐页“购买前检查七件事”，不跟随某一家品牌。
+const checks = [
+  ['看流量', '是每月重置还是一次性总量？余额结转、倍率与重置费是否写清楚。'],
+  ['看兼容', '设备能否安装指定客户端。部分品牌只提供官方客户端，私人订阅链接通常需要高付费套餐并持有邀请码才能申请。'],
+  ['看条款', '退款、续费、套餐变更和优惠限制是否明确；长周期折扣先确认需求变化时能否退出。'],
+];
+// VPS 栏目的主体是知识中心专题，不是 posts 里的单篇笔记。
+const count = (t) => (t.slug === 'vps' ? knowledgeArticles.length : posts.filter((p) => p.category === t.category).length);
+const brandCount = posts.filter((p) => p.category === '机场推荐').length;
+
+// 按“选之前 → 连上 → 出问题”三个阶段排的常见问题入口；锚文本就是读者会搜的问题。
+const stages = [
+  { code: 'BEFORE', title: '选之前', items: [
+    ['第一次接触：节点、订阅、客户端是什么？', '/knowledge/proxy-basics/'],
+    ['专线机场怎么挑？先看品牌资料与选购清单', '/category/airports/'],
+    ['月付、年付还是不限时流量？', '/knowledge/plan-costs/'],
+    ['每月大概需要多少流量？', '/tools/traffic/'],
+  ] },
+  { code: 'SETUP', title: '连上', items: [
+    ['机场客户端怎么用：官方客户端六步连上', '/knowledge/client-comparison/'],
+    ['为什么普通套餐不给订阅链接？', '/knowledge/client-comparison/#official'],
+    ['Clash 使用指南', '/category/clash/'],
+    ['小火箭 Shadowrocket 导入与规则', '/knowledge/shadowrocket/'],
+  ] },
+  { code: 'TROUBLE', title: '出问题', items: [
+    ['节点全部超时怎么办？', '/knowledge/node-timeout/'],
+    ['有延迟却打不开网页', '/knowledge/latency-without-access/'],
+    ['晚高峰特别卡', '/knowledge/peak-hour-slowdown/'],
+    ['为什么机场越用越卡？', '/knowledge/subscription-sharing/'],
+  ] },
+];
+
+// 首页常见问题：页面可见内容与 FAQPage 结构化数据共用同一份文字。
+const faqs = [
+  ['机场巡查博客是做什么的？', `整理专线机场的套餐资料、客户端使用教程和节点故障排查方法。目前收录 ${brandCount} 家品牌资料，另有网络知识库和 VPS 知识中心，帮助你在购买前对照、在连不上时自己排查。`],
+  ['本站有没有测速排名？', '没有。不同地区、运营商和时段的网络表现差别很大，单一环境的测速不能代表你的体验，所以本站只整理品牌公开资料，并提供工具让你检测自己的网络。'],
+  ['推荐的机场能用 Clash 或小火箭吗？', '本站收录的机场以官方客户端为主，普通套餐不提供可导入第三方软件的订阅链接；私人订阅链接需要购买高付费套餐并持有邀请码，再向官方客服申请。'],
+  ['通过本站链接购买会多花钱吗？', '不会。部分品牌入口是合作推广链接，本站可能从中获得一小笔佣金，用来维持网站运行，不会增加你的付款金额。'],
+];
+
+const site = 'https://jichangxuncha.blog/';
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebSite', '@id': site + '#website', url: site, name: '机场巡查博客', alternateName: 'jichangxuncha.blog', inLanguage: 'zh-CN', publisher: { '@id': site + '#org' },
+      potentialAction: { '@type': 'SearchAction', target: site + 'search/?q={search_term_string}', 'query-input': 'required name=search_term_string' } },
+    { '@type': 'Organization', '@id': site + '#org', name: '机场巡查博客', url: site, logo: site + 'logo-mark.png' },
+    { '@type': 'FAQPage', '@id': site + '#faq', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) },
+  ],
+};
 ---
-<Layout>
+<Layout title="机场巡查博客｜专线机场资料、客户端教程与节点故障排查" description={`收录 ${brandCount} 家专线机场的套餐、线路与优惠资料，提供 Clash、小火箭、v2rayN 等客户端教程，以及节点超时、晚高峰变慢等问题的排查方法。`}>
+  <script type="application/ld+json" set:html={JSON.stringify(graph).replace(/</g, '\\u003c')}/>
   <div class="wrap">
     <section class="hero">
       <div class="hero-copy">
         <p class="mono hero-eye">INDEPENDENT NOTES · 持续巡查中</p>
         <h1>连接世界，<br/>从一次认真<br/>选择开始。</h1>
-        <p class="hero-sub">记录机场体验，探索 VPS，整理订阅使用方法。<br/>让每一次选择，都多一份参考。</p>
+        <p class="hero-sub">整理专线机场资料、客户端教程与节点排查方法。<br/>让每一次选择，都多一份参考。</p>
         <a class="link" href="#latest">开始阅读 <span aria-hidden="true">↓</span></a>
+        <p><a class="link" href="/knowledge/">网络知识库 →</a></p>
+        <p><a href="/knowledge/client-comparison/">客户端怎么选</a> · <a href="/knowledge/#troubleshooting">节点故障排查</a> · <a href="/knowledge/#network">代理协议与原理</a></p>
       </div>
       <div class="hero-art"><DotField/></div>
     </section>
 
     <section class="topics" aria-label="栏目">
       {topics.map((t) => (
-        <a class="topic" href={t.slug==='vps'?'/catagory/vps/':`/category/${t.slug}/`} data-reveal>
+        <a class="topic" href={t.slug==='vps'?'/category/vps/':`/category/${t.slug}/`} data-reveal>
           <div class="topic-top mono"><span>{t.no}</span><span>{count(t)} 篇</span></div>
           <div class="topic-art"><Glyph slug={t.slug}/></div>
           <h2>{t.category}</h2>
           <p>{t.desc}</p>
         </a>
       ))}
+    </section>
+
+    <section class="sec" id="start">
+      <div class="sec-head"><div class="sec-sticky">
+        <span class="mono">START HERE</span>
+        <h2>从你的问题开始</h2>
+        <p class="sec-lead">不知道先看哪篇？按你现在所处的阶段，直接找到对应的答案。</p>
+      </div></div>
+      <div class="sec-body stages" data-reveal>
+        {stages.map((s) => (
+          <div class="stage">
+            <p class="mono stage-code">{s.code}</p>
+            <h3>{s.title}</h3>
+            <ul>
+              {s.items.map(([label, href]) => <li><a href={href}>{label}<span aria-hidden="true">→</span></a></li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
     </section>
 
     <section class="sec" id="latest">
@@ -46,7 +115,7 @@ const count = (t) => posts.filter((p) => p.category === t.category).length;
       <div class="sec-head"><div class="sec-sticky">
         <span class="mono">CHECKLIST</span>
         <h2>选之前，先过这三项</h2>
-        <a class="link head-link" href={`/posts/${guide.slug}/`}>读完整清单 <span aria-hidden="true">→</span></a>
+        <a class="link head-link" href="/category/airports/#checklist">读完整的七项清单 <span aria-hidden="true">→</span></a>
       </div></div>
       <ol class="sec-body checks" data-reveal>
         {checks.map(([head, text], i) => (
@@ -74,6 +143,33 @@ const count = (t) => posts.filter((p) => p.category === t.category).length;
           <p>检查国内与跨境站点响应，测试当前网络的下载速率，帮助排查网页打不开和连接缓慢的问题。</p>
           <span class="tool-go">打开网络工具箱 <span aria-hidden="true">→</span></span>
         </a>
+      </div>
+    </section>
+
+    <section class="sec" id="faq">
+      <div class="sec-head"><div class="sec-sticky">
+        <span class="mono">FAQ</span>
+        <h2>关于本站的常见问题</h2>
+      </div></div>
+      <div class="sec-body faq" data-reveal>
+        {faqs.map(([q, a]) => (
+          <details>
+            <summary>{q}</summary>
+            <p>{a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head"><div class="sec-sticky">
+        <span class="mono">ABOUT</span>
+        <h2>我们怎样整理资料</h2>
+      </div></div>
+      <div class="sec-body about" data-reveal>
+        <p>品牌资料来自各品牌公开的套餐与说明，页面会标明哪些是品牌声明、哪些仍待确认；教程与排查文章依据客户端项目文档和网络协议规范整理。本站不做测速排名，也不替任何一家作性能保证。</p>
+        <p>部分品牌入口是合作推广链接，点击后会先经过一个说明页，由你自己决定是否前往官网。</p>
+        <p class="about-links"><a href="/editorial/">内容与编辑规范 →</a><a href="/disclosure/">推广关系说明 →</a><a href="/about/">关于本站 →</a></p>
       </div>
     </section>
 
@@ -134,4 +230,31 @@ const count = (t) => posts.filter((p) => p.category === t.category).length;
   .tool-go{display:inline-block;margin-top:20px;font-weight:500;color:#3FBF8F;transition:transform .18s}
   .tool:hover .tool-go{transform:translateX(4px)}
   .closing{padding-block:0 clamp(40px,5vw,64px)}
+
+  .sec-lead{margin-top:14px;font-size:15px;color:var(--muted);max-width:22em}
+  .stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:24px;border-top:1px solid var(--ink)}
+  .stage{padding-top:clamp(18px,2vw,26px)}
+  .stage-code{color:var(--accent)}
+  .stage h3{margin:8px 0 10px;font-size:clamp(20px,2vw,26px);line-height:1.35}
+  .stage ul{list-style:none;margin:0;padding:0}
+  .stage li{border-top:1px solid var(--line)}
+  .stage a{display:flex;justify-content:space-between;gap:12px;align-items:baseline;padding:12px 0;font-size:15px;line-height:1.6;transition:color .15s}
+  .stage a span{flex:none;color:var(--muted);transition:transform .18s,color .15s}
+  .stage a:hover{color:var(--accent)}
+  .stage a:hover span{color:var(--accent);transform:translateX(3px)}
+  @media(max-width:900px){.stages{grid-template-columns:1fr}.stage+.stage{margin-top:16px}}
+
+  .faq{border-top:1px solid var(--ink)}
+  .faq details{border-bottom:1px solid var(--line)}
+  .faq summary{display:flex;justify-content:space-between;gap:16px;padding:18px 0;font-size:clamp(16px,1.5vw,18px);font-weight:500;cursor:pointer;list-style:none}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";flex:none;color:var(--accent);font-family:var(--mono-f)}
+  .faq details[open] summary::after{content:"−"}
+  .faq p{padding:0 0 20px;font-size:15px;line-height:1.9;color:var(--muted);max-width:40em}
+
+  .about{border-top:1px solid var(--ink);padding-top:clamp(18px,2vw,26px)}
+  .about p{font-size:16px;line-height:1.9;max-width:40em}
+  .about p+p{margin-top:12px}
+  .about-links{display:flex;flex-wrap:wrap;gap:8px 24px;color:var(--accent)}
+  .about-links a{min-height:36px;display:inline-flex;align-items:center}
 </style>

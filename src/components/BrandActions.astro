@@ -6,8 +6,12 @@ const primary=b?.affiliate ?? b?.official;
 const inDirectory=Astro.url.pathname==='/category/airports/';
 ---
 <div class="brand-actions">
-{primary && <a class="primary-action" href={primary} target="_blank" rel={b?.affiliate?'sponsored noopener noreferrer':'noopener noreferrer'}>前往官方 ↗</a>}
-<div class="secondary-actions">{b?.official ? <a href={b.official} target="_blank" rel="noopener noreferrer">官方网站 ↗</a> : <span>官方网站：待补充</span>}<a href={inDirectory?'#dossier-'+slug:'/posts/'+slug+'/'} data-brand-open={inDirectory?slug:undefined} data-brand-name={inDirectory?b?.zh:undefined} aria-haspopup={inDirectory?'dialog':undefined} aria-controls={inDirectory?'brand-profile-dialog':undefined}>品牌资料 →</a><a href="/tools/#diagnose">检查我的网络是否限制代理 →</a></div>
+{/* 没有官网地址的品牌不显示“官方网站”一项，读者可经“前往官方”进入；不显示占位文字。 */}
+{/* 推广链接先进站内确认页 /register/，由读者自己点按钮去官网；没有推广码的直接去官网。 */}
+{b?.affiliate
+  ? <a class="primary-action" href={`/register/${slug}/`} rel="nofollow">前往官方 →</a>
+  : primary && <a class="primary-action" href={primary} target="_blank" rel="noopener noreferrer">前往官方 ↗</a>}
+<div class="secondary-actions">{b?.official ? <a href={b.official} target="_blank" rel="noopener noreferrer">官方网站 ↗</a> : null}<a href={inDirectory?'#dossier-'+slug:'/posts/'+slug+'/'} data-brand-open={inDirectory?slug:undefined} data-brand-name={inDirectory?b?.zh:undefined} aria-haspopup={inDirectory?'dialog':undefined} aria-controls={inDirectory?'brand-profile-dialog':undefined}>品牌资料 →</a><a href="/tools/#diagnose">检查我的网络是否限制代理 →</a></div>
 <p class="disclosure">官方合作推广说明：通过合作链接购买，本站可能获得佣金；这不会影响你的正常购买与使用，也不会额外增加你的付款金额。套餐价格与优惠以官方结算页为准。</p>
 </div>
 <style>.brand-actions{margin-top:24px}.primary-action{display:inline-flex;align-items:center;min-height:44px;gap:12px;border-bottom:1px solid var(--ink);font-weight:500}.primary-action:hover{color:var(--accent);border-color:var(--accent)}.secondary-actions{display:flex;flex-wrap:wrap;gap:12px 24px;margin-top:12px;font-size:13px;color:var(--muted)}.secondary-actions a{display:inline-flex;align-items:center;min-height:36px}.secondary-actions a:hover{color:var(--accent)}.disclosure{font-size:12px;color:var(--muted);line-height:1.8;margin-top:8px}</style>

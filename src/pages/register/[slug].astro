@@ -1,0 +1,73 @@
+---
+// 推广链接确认页：不自动跳转，由读者自己点按钮前往官网。页面本身不进搜索引擎。
+import Layout from '../../layouts/Layout.astro';
+import { brandOverview } from '../../data/brand-overview';
+
+export function getStaticPaths() {
+  return brandOverview
+    .filter((b) => b.affiliate)
+    .map((b) => ({ params: { slug: b.slug }, props: { b } }));
+}
+const { b } = Astro.props;
+const host = new URL(b.affiliate).host;
+---
+<Layout title={`前往${b.zh}官网`} description={`前往${b.zh}官方网站前的说明。`} seo={true}>
+  <meta slot="seo" name="robots" content="noindex,nofollow"/>
+  <div class="wrap">
+    <header class="page-head">
+      <a class="mono back" href={`/posts/${b.slug}/`}>← {b.zh}品牌资料</a>
+      <h1>前往{b.zh}官网</h1>
+      <p>点击下方按钮，会在新标签页打开{b.zh}的官方网站。本页不会自动跳转。</p>
+    </header>
+
+    <section class="sec go">
+      <div class="sec-head"><div class="sec-sticky">
+        <span class="mono">BEFORE YOU GO</span>
+        <h2>点下去之前</h2>
+      </div></div>
+      <div class="sec-body">
+        <div class="pledge">
+          <p class="pledge-main">这是带邀请码的合作推广链接。通过它注册或购买，你付的价格和直接打开官网完全一样，<strong>不会额外增加任何付款金额</strong>。</p>
+          <p>本站只会从中获得一小笔佣金，用来维持网站运行，继续整理资料和教程。</p>
+        </div>
+
+        <dl class="facts">
+          <div><dt>将前往</dt><dd class="mono">{host}</dd></div>
+          {b.priceLabel || b.monthly ? <div><dt>{b.priceLabel ?? '入门参考'}</dt><dd>{b.monthly}</dd></div> : null}
+          {b.condition && <div><dt>优惠条件</dt><dd>{b.condition}</dd></div>}
+        </dl>
+
+        <a class="cta" href={b.affiliate} target="_blank" rel="sponsored nofollow noopener noreferrer">
+          <span>前往{b.zh}官网</span><span aria-hidden="true">↗</span>
+        </a>
+        <p class="cta-note">在新标签页打开。套餐价格、优惠和退款以官方结算页与服务条款为准，付款前请再核对一次。</p>
+
+        <ul class="also">
+          <li><a href={`/posts/${b.slug}/`}>先回去看看{b.zh}的完整资料 →</a></li>
+          <li><a href="/tools/#diagnose">先检查我的网络是否限制代理 →</a></li>
+          <li><a href="/disclosure/">本站的合作与推广说明 →</a></li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</Layout>
+<style>
+  .back{transition:color .15s}
+  .back:hover{color:var(--accent)}
+  .go{border-top:1px solid var(--ink);margin-bottom:clamp(40px,6vw,80px)}
+  .pledge{padding:22px 24px;border-left:3px solid var(--accent);background:#0b7a550d}
+  .pledge p{font-size:16px;line-height:1.85;color:var(--muted)}
+  .pledge .pledge-main{font-size:clamp(17px,1.6vw,19px);color:var(--ink);margin-bottom:8px}
+  .pledge strong{font-weight:600;color:var(--accent)}
+  .facts{margin:28px 0 0;border-top:1px solid var(--line)}
+  .facts div{display:grid;grid-template-columns:140px minmax(0,1fr);gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:15px}
+  .facts dt{color:var(--muted)}
+  .facts dd{margin:0}
+  .cta{display:flex;justify-content:space-between;align-items:center;gap:16px;max-width:460px;min-height:60px;margin-top:32px;padding:0 22px;background:var(--ink);color:var(--paper);font:500 18px var(--head);transition:background .15s}
+  .cta:hover{background:var(--accent)}
+  .cta-note{margin-top:12px;font-size:13px;color:var(--muted);max-width:40em}
+  .also{margin-top:32px;display:grid;gap:4px;font-size:15px}
+  .also a{display:inline-flex;align-items:center;min-height:40px;transition:color .15s}
+  .also a:hover{color:var(--accent)}
+  @media(max-width:520px){.facts div{grid-template-columns:1fr;gap:2px}}
+</style>

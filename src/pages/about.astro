@@ -1,34 +1,6 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import DotField from '../components/DotField.astro';
-import { topics } from '../data/site';
+import SiteInfoPage from '../components/SiteInfoPage.astro';
+import {siteInfoPages} from '../data/site-info';
+const page=siteInfoPages.find(p=>p.slug==='about');
 ---
-<Layout title="关于本站">
-  <article class="wrap">
-    <header class="page-head">
-      <span class="mono">ABOUT / 关于</span>
-      <h1>保持观察，<br/>认真记录。</h1>
-    </header>
-    <div class="sec">
-      <div class="sec-head"><div class="about-art"><DotField/></div></div>
-      <div class="sec-body about-copy">
-        <p>这里是机场巡查博客，域名为 jichangxuncha.blog。本站将围绕机场推荐、VPS与第三方订阅使用方法持续更新。</p>
-        <p>目前处于框架搭建阶段。文中示例用于展示栏目结构，后续会逐步补充真实评测、测试环境和更新时间。</p>
-        <ul>
-          {topics.map((t) => <li><a href={`/category/${t.slug}/`}><span class="mono">{t.no}</span>{t.category}<i aria-hidden="true">→</i></a></li>)}
-        </ul>
-      </div>
-    </div>
-  </article>
-</Layout>
-<style>
-  .about-art{max-width:280px}
-  .about-copy{max-width:42em}
-  .about-copy p{font-size:clamp(17px,1.5vw,19px);line-height:1.9;margin-bottom:1em}
-  .about-copy ul{margin-top:32px;border-top:1px solid var(--ink)}
-  .about-copy li{border-bottom:1px solid var(--line)}
-  .about-copy a{display:flex;align-items:center;gap:20px;min-height:60px;font:500 18px var(--head);transition:color .15s}
-  .about-copy a .mono{color:var(--muted)}
-  .about-copy a:hover{color:var(--accent)}
-  .about-copy i{margin-left:auto;font-style:normal}
-</style>
+<SiteInfoPage page={page}/>

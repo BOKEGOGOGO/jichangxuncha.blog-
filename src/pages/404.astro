@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+const ways = [
+  ['机场推荐', '/category/airports/', '品牌资料、套餐与选购清单'],
+  ['网络知识库', '/knowledge/', '客户端教程与故障排查'],
+  ['VPS 知识', '/category/vps/', '服务器入门、线路与成本'],
+  ['网络工具箱', '/tools/', '先测自己的网络'],
+];
+---
+<Layout title="页面不存在" description="你访问的页面不存在或已经移动。" seo={true}>
+  <meta slot="seo" name="robots" content="noindex"/>
+  <div class="wrap">
+    <header class="page-head nf">
+      <span class="mono">404 / NOT FOUND</span>
+      <h1>这一页没有接通。</h1>
+      <p>地址可能输错了，或者页面已经移动。可以搜一下，或者从下面的栏目重新进入。</p>
+    </header>
+    <form class="nf-search" action="/search/" method="get" role="search">
+      <label for="nf-q" class="mono">站内搜索</label>
+      <div><input id="nf-q" name="q" type="search" placeholder="例如：订阅更新后不能用"/><button type="submit">搜索</button></div>
+    </form>
+    <ul class="nf-ways">
+      {ways.map(([name, href, desc]) => <li><a href={href}><strong>{name}</strong><small>{desc}</small><i aria-hidden="true">→</i></a></li>)}
+    </ul>
+    <p class="nf-home"><a class="link" href="/">回到首页 <span aria-hidden="true">→</span></a></p>
+  </div>
+</Layout>
+<style>
+  .nf-search{max-width:640px}
+  .nf-search label{display:block;color:var(--muted);margin-bottom:10px}
+  .nf-search div{display:flex;border:1px solid var(--ink);background:#fff}
+  .nf-search div:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+  .nf-search input{flex:1;min-width:0;min-height:52px;padding:0 14px;border:0;background:transparent;font:500 16px var(--head)}
+  .nf-search input:focus{outline:none}
+  .nf-search button{border:0;min-width:84px;background:var(--ink);color:var(--paper);font:500 15px var(--head);cursor:pointer}
+  .nf-search button:hover{background:var(--accent)}
+  .nf-ways{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:clamp(40px,6vw,72px);border-top:1px solid var(--ink)}
+  .nf-ways li+li{border-left:1px solid var(--line)}
+  .nf-ways a{display:block;position:relative;padding:22px 20px 40px}
+  .nf-ways li:first-child a{padding-left:0}
+  .nf-ways strong{display:block;font:500 20px var(--head);transition:color .15s}
+  .nf-ways small{display:block;margin-top:4px;font-size:14px;color:var(--muted)}
+  .nf-ways i{position:absolute;right:20px;top:22px;font-style:normal}
+  .nf-ways a:hover strong,.nf-ways a:hover i{color:var(--accent)}
+  .nf-home{margin:40px 0 clamp(56px,8vw,112px)}
+  @media(max-width:760px){
+    .nf-ways{grid-template-columns:1fr}
+    .nf-ways li+li{border-left:0;border-top:1px solid var(--line)}
+    .nf-ways a,.nf-ways li:first-child a{padding:18px 0}
+    .nf-ways i{right:0;top:18px}
+  }
+</style>

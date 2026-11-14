@@ -255,7 +255,7 @@ export const vpsArticles=[
     "slug": "what-is-vps",
     "title": "VPS是什么？从服务器资源到实际用途的新手指南",
     "keyword": "VPS是什么",
-    "description": "解释VPS、虚拟主机、独立服务器与云服务器的关系，按建站和开发场景理解资源、成本与管理责任。",
+    "description": "VPS是什么？用新手能懂的方式解释VPS、虚拟主机、独立服务器与云服务器的关系，按建站和开发场景说明需要的资源、成本与管理责任，帮助判断自己是否真的需要VPS。",
     "lead": "VPS是从物理服务器中划分出来、可以独立运行操作系统和程序的虚拟服务器。你购买的是可管理的计算、内存、存储与网络资源，而不是一个已经替你维护好的网站。",
     "sections": [
       {
@@ -349,7 +349,7 @@ export const vpsArticles=[
     "slug": "how-to-choose-vps",
     "title": "VPS怎么选？CPU、内存、硬盘、流量与预算解析",
     "keyword": "VPS怎么选",
-    "description": "从实际用途拆解vCPU、RAM、SSD、NVMe、流量、IPv4和付款周期，建立VPS购买前的参数检查表。",
+    "description": "VPS怎么选？从实际用途拆解vCPU、内存、SSD与NVMe硬盘、流量、IPv4和付款周期，把套餐价之外的费用加回来，建立一份购买前可以逐项核对的VPS参数检查表。",
     "lead": "选VPS先列任务，再选资源与地区。把CPU、内存、存储、网络和附加账单一起比较，比找一个“通用最佳配置”更可靠。本文不把任何配置数字写成网站承载保证。",
     "sections": [
       {
@@ -680,7 +680,7 @@ export const vpsArticles=[
     "slug": "ssh-connection",
     "title": "VPS SSH连接教程：首次登录、密钥与常见错误排查",
     "keyword": "VPS SSH连接教程",
-    "description": "使用OpenSSH连接自己的Linux VPS，核对地址、端口和主机指纹，了解密钥登录与常见连接错误，不关闭安全检查。",
+    "description": "VPS SSH连接教程：用OpenSSH连接自己的Linux VPS，核对地址、端口和主机指纹，配置密钥登录，并按错误提示排查常见连接失败，全程不需要关闭安全检查。",
     "lead": "连接自己的VPS前，先从官方控制台取得公网地址、登录用户名、SSH端口和认证方式。以下以你有权限管理的Linux服务器与OpenSSH客户端为前提；不需要关闭防火墙，也不需要执行来历不明的一键脚本。",
     "sections": [
       {

@@ -12,7 +12,7 @@ const { topic } = Astro.props;
 const rows = posts.filter((p) => p.category === topic.category);
 const others = topics.filter((t) => t !== topic);
 ---
-{topic.slug === 'vps' ? <VpsHome/> : <Layout title={topic.slug === 'airports' ? '机场推荐｜专线机场套餐对比、优惠码与选购指南' : topic.category} description={topic.slug === 'airports' ? `整理机场推荐与${posts.filter(p=>p.category==='机场推荐').length}家品牌资料，比较月付、年付和不限时套餐，解释IPLC与IEPL线路、设备限制及官方客户端，附购买检查清单和常见问题。` : undefined} seo={topic.slug === 'airports'}>
+{topic.slug === 'vps' ? <VpsHome/> : <Layout title={topic.slug === 'airports' ? '机场推荐｜按流量、线路与预算找到适合你的套餐' : topic.category} description={topic.slug === 'airports' ? `整理机场推荐与${posts.filter(p=>p.category==='机场推荐').length}家品牌资料，比较月付、年付和不限时套餐，解释IPLC与IEPL线路、设备限制及官方客户端，附购买检查清单和常见问题。` : undefined} seo={topic.slug === 'airports'}>
   {topic.slug === 'airports' && <AirportSeo slot="seo"/>}
   <div class="wrap">
     {topic.slug === 'airports' ? <AirportGuide/> : <><header class="page-head cat-head">
@@ -26,7 +26,7 @@ const others = topics.filter((t) => t !== topic);
     <PostList rows={rows} showCategory={false}/></>}
     <nav class="others" aria-label="其他栏目">
       {others.map((t) => (
-        <a href={t.slug==='vps'?'/catagory/vps/':`/category/${t.slug}/`}>
+        <a href={t.slug==='vps'?'/category/vps/':`/category/${t.slug}/`}>
           <span class="mono">{t.no}</span>
           <strong>{t.category}</strong>
           <small>{t.desc}</small>

@@ -1,0 +1,99 @@
+---
+// 全站栏目总览。/category/ 是正式地址；旧的拼写 /catagory/ 在 astro.config.mjs 和 public/_redirects 里 301 到这里，避免截短网址进入 404。
+import Layout from '../../layouts/Layout.astro';
+import { posts } from '../../data/posts';
+import { libraryArticles } from '../../data/knowledge-library';
+import { knowledgeArticles } from '../../data/vps-knowledge';
+import { navGroups } from '../../data/nav';
+
+const brands = posts.filter((p) => p.category === '机场推荐').length;
+const groupItems = (id) => navGroups.find((g) => g.id === id)?.items ?? [];
+
+const columns = [
+  {
+    code: 'AIRPORTS', title: '机场推荐', href: '/category/airports/', count: `${brands} 个品牌`,
+    desc: '套餐价格、每月流量、线路类型和设备限制放在一起对照，附购买前检查清单。',
+    links: [
+      { label: '购买前检查清单', href: '/category/airports/#checklist' },
+      { label: '机场为什么越用越卡', href: '/knowledge/subscription-sharing/' },
+      { label: '月付、年付怎么选', href: '/knowledge/plan-costs/' },
+    ],
+  },
+  {
+    code: 'CLIENTS', title: '客户端', href: '/knowledge/client-comparison/', count: `${groupItems('clients').length} 篇教程`,
+    desc: '先用机场官方客户端；拿到私人订阅链接后，再看 Clash、小火箭等第三方工具。',
+    links: groupItems('clients').slice(1).map((i) => ({ label: i.label, href: i.href })),
+  },
+  {
+    code: 'KNOWLEDGE', title: '网络知识库', href: '/knowledge/', count: `${libraryArticles.length} 篇文章`,
+    desc: '新手概念、节点故障排查、协议与网络原理，按遇到的问题阅读。',
+    links: groupItems('knowledge').slice(1).map((i) => ({ label: i.label, href: i.href })),
+  },
+  {
+    code: 'VPS', title: 'VPS知识', href: '/category/vps/', count: `${knowledgeArticles.length} 篇文章`,
+    desc: '服务器入门、地区与线路、成本计算，以及连不上、IP 不可达的排查。',
+    links: [
+      { label: 'VPS 指南目录', href: '/vps/guides/' },
+      { label: '自建 VPS 与机场怎么选', href: '/vps/guides/vps-vs-airport/' },
+      { label: '服务商资料', href: '/vps/providers/' },
+    ],
+  },
+  {
+    code: 'TOOLS', title: '工具', href: '/tools/', count: `${groupItems('tools').length} 个入口`,
+    desc: '检查当前网络连通和下载速度，估算每月流量，搜索全站内容。',
+    links: groupItems('tools').slice(1).map((i) => ({ label: i.label, href: i.href })),
+  },
+];
+---
+<Layout title="全部栏目" description="机场推荐、客户端教程、网络知识库、VPS知识和网络工具的栏目总览，从这里进入各个分类。" canonicalPath="/category/">
+  <div class="wrap">
+    <header class="page-head">
+      <span class="mono">INDEX / 全部栏目</span>
+      <h1>全部栏目</h1>
+      <p>本站内容分成五个栏目。不确定从哪里开始，可以先看机场推荐；已经买了套餐却连不上，直接去客户端或知识库的故障排查。</p>
+    </header>
+
+    <ol class="cols">
+      {columns.map((c, i) => (
+        <li class="col">
+          <div class="col-head">
+            <span class="mono col-no">{String(i + 1).padStart(2, '0')} / {c.code}</span>
+            <h2><a href={c.href}>{c.title} <span aria-hidden="true">→</span></a></h2>
+            <span class="mono col-count">{c.count}</span>
+          </div>
+          <div class="col-body">
+            <p>{c.desc}</p>
+            <ul class="col-links">
+              {c.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+            </ul>
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <p class="cols-foot">找不到想要的内容？<a href="/search/">用站内搜索 →</a></p>
+  </div>
+</Layout>
+
+<style>
+  .cols { list-style: none; margin: 0 0 clamp(48px, 7vw, 96px); padding: 0; border-bottom: 1px solid var(--line); }
+  .col { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: clamp(28px, 4vw, 44px); border-top: 1px solid var(--line); }
+  .col-head { grid-column: 1 / 6; }
+  .col-body { grid-column: 6 / 13; }
+  .col-no, .col-count { display: block; color: var(--muted); font-size: 12px; }
+  .col-count { margin-top: 10px; }
+  .col h2 { margin-top: 10px; font-size: clamp(24px, 2.6vw, 34px); line-height: 1.3; }
+  .col h2 a { color: var(--ink); text-decoration: none; }
+  .col h2 a span { color: var(--accent); transition: margin-left .2s; }
+  .col h2 a:hover span, .col h2 a:focus-visible span { margin-left: 6px; }
+  .col-body p { margin: 0; color: var(--muted); max-width: 34em; }
+  .col-links { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 10px; margin: 18px 0 0; padding: 0; }
+  .col-links a { display: inline-block; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 14px; color: var(--ink); text-decoration: none; }
+  .col-links a:hover, .col-links a:focus-visible { border-color: var(--accent); color: var(--accent); }
+  .cols-foot { margin-bottom: clamp(56px, 8vw, 112px); color: var(--muted); }
+  .cols-foot a { color: var(--accent); }
+  @media (max-width: 760px) {
+    .col-head, .col-body { grid-column: 1 / -1; }
+    .col-body { margin-top: 14px; }
+  }
+</style>

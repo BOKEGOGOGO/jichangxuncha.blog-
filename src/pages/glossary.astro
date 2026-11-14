@@ -1,0 +1,68 @@
+---
+import Layout from '../layouts/Layout.astro';
+// 速查用的短解释；每个词都指向站内已有的深度文章，词典本身不重复展开。
+const groups = [
+  ['基础说法', [
+    ['jichang', '机场', '提供多地区代理节点、按套餐收费的服务的俗称。本站“机场推荐”整理的就是这类服务的公开资料。', '/knowledge/airport-buying/', '机场理性选购'],
+    ['node', '节点', '客户端可以连接的一个代理服务器入口，通常按地区命名，例如“香港 01”。同一套餐下的节点共用账号和流量。', '/knowledge/proxy-basics/', '代理基础'],
+    ['subscription', '订阅链接', '服务方提供的一条地址，客户端定期从这里下载最新的节点配置。链接里含个人凭证，不要公开。部分品牌只提供官方客户端，私人订阅链接通常要高付费套餐并持有邀请码才能申请。', '/knowledge/subscription-update-no-connection/', '订阅能更新但节点不能用'],
+    ['client', '客户端', '装在设备上、负责导入配置并转发流量的软件，例如 Clash 系、v2rayN、Shadowrocket、sing-box。不同客户端支持的协议和规则写法不完全相同。', '/knowledge/client-comparison/', '客户端怎么选'],
+    ['protocol', '协议', 'Shadowsocks、VLESS、Trojan 等，规定客户端和节点之间如何加密、如何传输。客户端必须支持服务方使用的协议才能连接。', '/knowledge/proxy-protocols/', '代理协议'],
+  ]],
+  ['套餐与计费', [
+    ['multiplier', '倍率', '节点的流量计费系数。1× 按实际用量扣除；2× 节点用 1 GB 会扣 2 GB。“全节点 1×”是品牌声明，购买前以用户中心标注为准。', '/knowledge/airport-buying/', '机场理性选购'],
+    ['reset', '流量重置', '周期套餐每月或每 30 天恢复额度，未用完的部分通常不结转。重置日以用户中心显示为准。', '/knowledge/airport-buying/', '机场理性选购'],
+    ['no-expiry', '不限时包', '一次性购买的固定总量，不按月清零，用完为止。适合用量少或作备用。', '/knowledge/airport-buying/', '机场理性选购'],
+  ]],
+  ['线路与网络', [
+    ['iplc', 'IPLC', '国际私有租用电路，指跨境段使用租用的专用电路承载。它描述的是一段线路的承载方式，不保证端到端的速度或可用性。', '/knowledge/airport-buying/', 'IPLC、IEPL 与普通公网'],
+    ['iepl', 'IEPL', '国际以太网专线，同样是跨境专用连接，以以太网形式提供。和 IPLC 一样，它只是线路标签，实际体验还取决于你的本地网络和时段。', '/knowledge/airport-buying/', 'IPLC、IEPL 与普通公网'],
+    ['bgp', 'BGP', '网络之间交换路由的协议。商家说“BGP 线路”通常指接入多家运营商、由路由自动选路，不等于专线。', '/vps/vps-network-lines/', 'VPS 线路怎么看'],
+    ['native-ip', '原生 IP', '出口 IP 的登记地区和实际使用地区一致，常和流媒体、AI 平台的地区判断有关。这是品牌声明，平台规则也可能随时变化。', '/knowledge/airport-buying/', '机场理性选购'],
+    ['latency', '延迟', '数据往返一次的时间，通常以毫秒计。延迟低只说明能连通，不代表网页或应用一定能打开。', '/knowledge/latency-without-access/', '有延迟却打不开'],
+  ]],
+  ['使用与排查', [
+    ['rule-mode', '规则模式与全局模式', '规则模式按规则分流，国内网站直连、其他走代理；全局模式让全部流量都走代理。排查问题时两种模式的结果可以互相对照。', '/category/clash/', 'Clash 专区'],
+    ['timeout', '超时', '在规定时间内没有收到回应。所有节点同时超时，问题往往在本地网络、客户端配置或订阅本身，而不是每个节点都坏了。', '/knowledge/node-timeout/', '节点全部超时怎么办'],
+  ]],
+];
+---
+<Layout title="术语词典｜机场、节点、订阅、倍率、IPLC 与 BGP 速查" description="机场术语词典：用一两句话解释机场、节点、订阅链接、倍率、流量重置、不限时包、IPLC、IEPL、BGP、原生IP等常见说法，每条都链接到站内的深入文章。">
+  <div class="wrap">
+    <header class="page-head">
+      <span class="mono">GLOSSARY</span>
+      <h1>术语词典</h1>
+      <p>品牌资料和教程里反复出现的说法，这里各用一两句话解释。想深入了解，点每条后面的链接。</p>
+    </header>
+    <nav class="g-index" aria-label="术语索引">
+      {groups.flatMap(([, items]) => items).map(([id, term]) => <a href={`#${id}`}>{term}</a>)}
+    </nav>
+    {groups.map(([group, items]) => (
+      <section class="sec">
+        <div class="sec-head"><div class="sec-sticky"><h2>{group}</h2></div></div>
+        <dl class="sec-body terms">
+          {items.map(([id, term, text, href, label]) => (
+            <div id={id}>
+              <dt>{term}</dt>
+              <dd><p>{text}</p><a href={href}>延伸阅读：{label} <span aria-hidden="true">→</span></a></dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    ))}
+  </div>
+</Layout>
+<style>
+  .g-index{display:flex;flex-wrap:wrap;gap:6px 20px;padding-bottom:clamp(32px,4vw,48px);font-size:15px}
+  .g-index a{display:inline-flex;align-items:center;min-height:36px;border-bottom:1px solid var(--line);transition:color .15s,border-color .15s}
+  .g-index a:hover{color:var(--accent);border-color:var(--accent)}
+  .terms{margin:0;border-top:1px solid var(--ink)}
+  .terms>div{display:grid;grid-template-columns:180px minmax(0,1fr);column-gap:24px;padding:22px 0;border-bottom:1px solid var(--line);scroll-margin-top:90px}
+  .terms>div:target{background:#0b7a550d}
+  dt{font:500 clamp(18px,1.7vw,22px)/1.4 var(--head)}
+  dd{margin:0}
+  dd p{font-size:16px;line-height:1.85;max-width:38em}
+  dd a{display:inline-flex;align-items:center;gap:8px;min-height:36px;margin-top:4px;font-size:14px;color:var(--accent)}
+  dd a:hover{text-decoration:underline}
+  @media(max-width:640px){.terms>div{grid-template-columns:1fr;row-gap:6px}}
+</style>

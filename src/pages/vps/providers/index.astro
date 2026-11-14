@@ -3,7 +3,7 @@ import VpsLayout from '../../../layouts/VpsLayout.astro';
 import VpsProviderList from '../../../components/VpsProviderList.astro';
 import {verifiedDate} from '../../../data/vps';
 ---
-<VpsLayout title="VPS服务商大全｜官方资料、产品类型与购买前核对" description="查看已收录的DigitalOcean与Hetzner Cloud官方资料，对照产品、地区、配置与费用状态，明确已核实信息和待确认条件。" kind="CollectionPage" crumbs={[{name:'VPS推荐',href:'/catagory/vps/'},{name:'商家目录',href:'/vps/providers/'}]}>
+<VpsLayout title="VPS服务商大全｜官方资料、产品类型与购买前核对" description="VPS服务商目录：收录DigitalOcean与Hetzner Cloud的官方资料，对照产品类型、机房地区、配置与费用状态，并标明哪些信息已核实、哪些条件仍需购买前确认。" kind="CollectionPage" crumbs={[{name:'VPS推荐',href:'/category/vps/'},{name:'商家目录',href:'/vps/providers/'}]}>
 <header class="page-head"><span class="vps-kicker mono">PROVIDER DIRECTORY</span><h1>VPS服务商目录</h1><p>把产品资料与性能判断分开。这里仅列有可信官方入口的服务商，未购买、未跑分，也不以表格顺序表示优劣。</p></header>
-<VpsProviderList/><section class="vps-block vps-prose"><h2>怎样使用这个目录？</h2><p>先确定自己的用途，再把同一机型的CPU、内存、存储、网络和附加成本记在一起。参数完整不代表适合你的路由；参数尚不完整的条目也不会用旧价格填空。</p><p>核对日期：{verifiedDate}。缺少的固定报价、退款条件、硬件型号或线路验证会明确指出。新商家需要足够资料才收录，不创建空白品牌页。</p><a class="vps-link" href="/vps/guides/how-to-choose-vps/">先读参数与购买清单 →</a></section>
+<h2 class="sr-only">服务商列表</h2><VpsProviderList/><section class="vps-block vps-prose"><h2>怎样使用这个目录？</h2><p>先确定自己的用途，再把同一机型的CPU、内存、存储、网络和附加成本记在一起。参数完整不代表适合你的路由；参数尚不完整的条目也不会用旧价格填空。</p><p>核对日期：{verifiedDate}。缺少的固定报价、退款条件、硬件型号或线路验证会明确指出。新商家需要足够资料才收录，不创建空白品牌页。</p><a class="vps-link" href="/vps/guides/how-to-choose-vps/">先读参数与购买清单 →</a></section>
 </VpsLayout>

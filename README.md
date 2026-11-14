@@ -1,29 +1,32 @@
 # 机场巡查博客
 
-基于 Astro 的静态博客框架，域名配置为 https://jichangxuncha.blog。
+基于 Astro 的纯静态网站，域名 https://jichangxuncha.blog，部署在 Cloudflare。
 
 ## 本地运行
 
 npm install
 npm run dev
 
-## 构建
+## 构建与发布
 
 npm run build
 npm run preview
 
-将 dist 目录发布至支持静态网站的托管平台，再配置域名 DNS 和 HTTPS。当前仅保存本地文件，尚未发布或绑定域名。
+把 `dist` 目录发布到 Cloudflare。`public/_redirects`（301 跳转）和 `public/_headers`（响应头）会随构建复制进 `dist`，由 Cloudflare 读取。
 
 ## 修改内容
 
-- src/data/posts.js：文章内容与分类
-- src/data/site.js：栏目名称和说明
-- src/pages/index.astro：首页
-- src/layouts/Layout.astro：导航、页脚
-- src/styles/global.css：配色、字体等全站样式
-- src/components/Loader.astro：loading page（每次会话只播放一次，地址加 ?loader 可重看）
-- src/components/DotField.astro：首屏点阵主视觉
-- src/components/Glyph.astro：栏目点阵小图
-- src/pages/subscriptions.astro：订阅工具
+- `src/data/nav.js`：顶栏、手机菜单、页脚的全部入口（加入口只改这里）
+- `src/data/posts.js`、`src/data/additional-brands.js` 等：品牌资料
+- `src/data/brand-overview.js`：品牌返佣链接（带 `code=` 的是返佣链接，只出现在 `/register/{品牌}/` 确认页）
+- `src/data/knowledge-library.js`、`src/data/knowledge-depth.js`：网络知识库文章
+- `src/data/vps*.js`：VPS 知识
+- `src/data/site-pages.js`：RSS 与站内搜索共用的页面清单
+- `src/pages/sitemap.xml.ts`：站点地图（正文有改动时更新对应的 lastmod）
+- `src/layouts/Layout.astro`：全站外框；页面传 `noindex` 即不被收录
+- `src/styles/global.css`：配色、字体等全站样式
+- `src/components/Loader.astro`：loading page（每次会话只播放一次，地址加 `?loader` 可重看）
 
-当前文章均为示例。订阅工具仅生成客户端导入入口，不提供格式转换或服务器代理。
+## 跳转
+
+页面改地址时，同时在 `astro.config.mjs` 的 `redirects` 和 `public/_redirects` 各加一条。前者生成兜底的跳转页，后者让 Cloudflare 返回真正的 301。

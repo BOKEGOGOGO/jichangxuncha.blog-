@@ -1,4 +1,5 @@
 // 常青知识正文；每篇维护独立搜索意图与来源。
+import {applySecondRound} from './knowledge-depth.js';
 export const libraryUpdated="2026-11-10";
 export const libraryGroups=[
   {
@@ -71,7 +72,7 @@ export const libraryGroups=[
     "existing": [
       {
         "label": "VPS知识中心",
-        "href": "/catagory/vps/"
+        "href": "/category/vps/"
       },
       {
         "label": "自建VPS与机场比较",
@@ -233,7 +234,7 @@ export const libraryArticles=[
     "path": "/knowledge/hiddify/",
     "group": "clients",
     "title": "Hiddify使用指南：跨设备配置、订阅更新与自动选路",
-    "description": "介绍Hiddify App与服务端管理工具的区别，核对平台和配置格式，完成安装、导入、连接与跨设备对照，解释自动选择节点的边界。",
+    "description": "Hiddify使用教程：区分Hiddify App与服务端管理工具，核对平台和配置格式，完成安装、导入订阅、连接与跨设备对照，并解释自动选择节点能做到什么、做不到什么。",
     "lead": "Hiddify App是跨平台连接客户端，Hiddify Manager则用于管理服务端。只想在手机或电脑使用已有配置的人，不需要因此在服务器上安装管理面板。",
     "sections": [
       {
@@ -371,7 +372,7 @@ export const libraryArticles=[
     "slug": "shadowrocket",
     "path": "/knowledge/shadowrocket/",
     "group": "clients",
-    "title": "Shadowrocket使用指南：Apple设备导入、规则与连接验证",
+    "title": "小火箭Shadowrocket使用教程：Apple设备导入、规则与连接验证",
     "description": "核对Shadowrocket开发者与App Store来源，理解节点订阅和规则配置，完成导入、授权和真实连接检查，避免把小火箭当成附带节点的服务。",
     "lead": "Shadowrocket常被称为“小火箭”，是独立的网络工具，不自带代理服务。对Apple设备用户，关键是核实应用来源，并区分节点列表、规则配置和系统连接授权。",
     "sections": [
@@ -485,7 +486,7 @@ export const libraryArticles=[
     "path": "/knowledge/sing-box/",
     "group": "clients",
     "title": "sing-box入门：原生JSON配置、图形客户端与版本迁移",
-    "description": "区分sing-box核心与官方图形客户端，理解入站、出站、路由和DNS结构，检查配置与版本迁移，说明与Clash YAML及订阅格式的差异。",
+    "description": "sing-box入门教程：区分核心程序与官方图形客户端，读懂入站、出站、路由和DNS四个配置结构，检查配置与版本迁移，并说明与Clash YAML及订阅格式的差异。",
     "lead": "sing-box是一套代理平台与核心实现，不只是一款有固定按钮的桌面软件。先确认你使用的是核心程序、官方图形客户端还是第三方封装，再选择对应安装和配置文档。",
     "sections": [
       {
@@ -630,8 +631,8 @@ export const libraryArticles=[
     "slug": "node-timeout",
     "path": "/knowledge/node-timeout/",
     "group": "troubleshooting",
-    "title": "机场节点全部超时怎么办？DIRECT正常时的分层排查",
-    "description": "从账号、活动配置、节点入口和应用接管定位全部超时，说明DIRECT对照能证明什么，给出最小测试矩阵与结果解释，避免直接判定地区封禁。",
+    "title": "机场节点全部超时怎么办？Timeout原因与分层排查方法",
+    "description": "机场节点全部超时（Timeout）怎么办？从账号状态、活动配置、节点入口和应用接管逐层定位，说明DIRECT对照能证明什么，给出最小测试矩阵，避免直接判定地区封禁。",
     "lead": "全部超时说明客户端的这些探测没有在时限内完成，不直接说明所有节点已被封。先确认探测对象、账号状态和流量接入，再用同一设备做有限对照，保留错误阶段。",
     "sections": [
       {
@@ -2313,6 +2314,7 @@ export const libraryArticles=[
   }
 ];
 export const libraryBySlug=slug=>libraryArticles.find(a=>a.slug===slug);
+applySecondRound(libraryArticles);
 export const libraryPaths=["/knowledge/",...libraryArticles.map(a=>a.path)];
 
 libraryBySlug("airport-buying").sources.push({"label": "MEF以太网服务定义（PDF）", "href": "https://www.mplify.net/PDF_Documents/technical-specifications/MEF6-1.pdf"},{"label": "IP地理定位的数据库差异", "href": "https://developers.cloudflare.com/network/ip-geolocation/"});

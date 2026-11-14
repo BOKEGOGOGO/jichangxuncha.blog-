@@ -2,7 +2,7 @@
 import { posts } from '../data/posts';
 import { faqs } from '../data/airport-guide';
 const url='https://jichangxuncha.blog/category/airports/';
-const title='机场推荐｜专线机场套餐对比、优惠码与选购指南 · jichangxuncha.blog';
+const title='机场推荐｜按流量、线路与预算找到适合你的套餐 · 机场巡查';
 const description=`整理机场推荐与${posts.filter(p=>p.category==='机场推荐').length}家品牌资料，比较月付、年付和不限时套餐，解释IPLC与IEPL线路、设备限制及官方客户端，附购买检查清单和常见问题。`;
 const graph={'@context':'https://schema.org','@graph':[
 {'@type':'WebSite','@id':'https://jichangxuncha.blog/#website',url:'https://jichangxuncha.blog/',name:'机场巡查博客',inLanguage:'zh-CN'},
@@ -14,4 +14,4 @@ const graph={'@context':'https://schema.org','@graph':[
 <meta name="robots" content="index,follow"/>
 <meta property="og:type" content="website"/><meta property="og:locale" content="zh_CN"/><meta property="og:site_name" content="机场巡查博客"/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:url" content={url}/>
 <meta name="twitter:card" content="summary"/><meta name="twitter:title" content={title}/><meta name="twitter:description" content={description}/>
-<script type="application/ld+json" set:html={JSON.stringify(graph).replace(/</g,'\u003c')}/>
+<script type="application/ld+json" set:html={JSON.stringify(graph).replace(/</g,'\\u003c')}/>

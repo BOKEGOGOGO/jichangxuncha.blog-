@@ -1,2 +1,2 @@
 import { defineConfig } from 'astro/config';
-export default defineConfig({ site: 'https://jichangxuncha.blog', redirects: { '/vps/': '/catagory/vps/', '/category/vps/': '/catagory/vps/', '/subscriptions/': '/tools/', '/vps/vps-vs-vpn/': '/vps/vps-vs-web-hosting/', '/vps/vps-proxy-server/': '/vps/reverse-proxy/' }, devToolbar: { enabled: false } });
+export default defineConfig({ site: 'https://jichangxuncha.blog', redirects: { '/catagory/': '/category/', '/catagory/vps/': '/category/vps/', '/vps/': '/category/vps/', '/subscriptions/': '/tools/', '/vps/vps-vs-vpn/': '/vps/vps-vs-web-hosting/', '/vps/vps-proxy-server/': '/vps/reverse-proxy/', '/register/': '/category/airports/', '/register/aff/': '/category/airports/' }, devToolbar: { enabled: false } });

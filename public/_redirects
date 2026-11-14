@@ -1,0 +1,12 @@
+# Cloudflare 跳转规则：真正的 301，比 astro.config.mjs 生成的 meta-refresh 页面更利于搜索引擎。
+# 两边要保持一致：在 astro.config.mjs 加跳转时，这里也加一行。
+
+/catagory/            /category/              301
+/catagory/vps/        /category/vps/          301
+/vps/                 /category/vps/          301
+/subscriptions/       /tools/                 301
+/vps/vps-vs-vpn/      /vps/vps-vs-web-hosting/  301
+/vps/vps-proxy-server/  /vps/reverse-proxy/   301
+/register/            /category/airports/     301
+/register/aff/        /category/airports/     301
+/register/aff/:slug/  /register/:slug/        301

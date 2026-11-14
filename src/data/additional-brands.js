@@ -9,7 +9,7 @@ export const additionalBrands = [
     "affiliate": false,
     "tagline": "全IEPL线路声明，官方客户端账号登录；月付与一次性额度分开选择。",
     "title": "浪网：IEPL线路、套餐价格与lw888新人八折优惠",
-    "description": "入门150 GB/月、月付¥30；年付标准80 GB/月、¥119/年。整理官方客户端、设备限制与lw888优惠规则。",
+    "description": "浪网（WaveNet）套餐资料：入门月付¥30、150 GB/月，年付标准¥119/年、80 GB/月；IEPL专线与VLESS，全节点1×计费，使用官方客户端登录，并说明设备限制与lw888新人八折规则。",
     "monthly": "¥30/月 · 150 GB/月",
     "annual": "¥119/年 · 80 GB/月",
     "architecture": "IEPL专线、VLESS、全节点1×（品牌声明）",
@@ -222,13 +222,13 @@ export const additionalBrands = [
     "url": "https://varnexa.lingdongaff.com/#/?code=TIMwZeIR",
     "official": "https://lingdongyun.site/",
     "affiliate": true,
-    "tagline": "SS协议与第三方订阅，按设备领取对应格式；提供月付、年付与固定总量流量包。",
-    "title": "灵动云：套餐价格、第三方订阅与ld888八折优惠",
-    "description": "拂风100 GB/月、¥20/月；穿云70 GB/月、¥99/年。整理SS协议、Clash及小火箭订阅领取与ld888优惠范围。",
+    "tagline": "SS协议与IEPL／IPLC优化线路；提供月付、年付与固定总量流量包。",
+    "title": "灵动云：套餐价格、使用方式与ld888八折优惠",
+    "description": "灵动云套餐资料：拂风月付¥20、100 GB/月，穿云年付¥99/年、70 GB/月；SS协议搭配IEPL／IPLC优化线路与BGP多线入口，不限设备，并说明使用方式和ld888八折适用范围。",
     "monthly": "¥20/月 · 100 GB/月",
     "annual": "¥99/年 · 70 GB/月",
     "architecture": "SS、IEPL／IPLC优化线路、BGP多线入口",
-    "caution": "订阅需向客服领取；穿云、流量包与定制不参加ld888",
+    "caution": "普通套餐不提供第三方订阅；穿云、流量包与定制不参加ld888",
     "prices": [
       {
         "name": "拂风",
@@ -395,10 +395,10 @@ export const additionalBrands = [
         "资料列示重置包：拂风¥20、驭浪¥50、破晓¥100、凌霄¥180、穿云¥99、定制¥680，按次清零当期已用流量。也可按用户中心规则升级套餐或另购流量包，差价与生效规则应在操作前核对。"
       ],
       [
-        "如何领取Clash、通用或小火箭订阅？",
-        "在用户中心注册并开通套餐后，向在线客服或用户中心工单说明设备和客户端，领取对应格式：Clash系使用Clash订阅，v2rayN／v2rayNG使用通用订阅，Shadowrocket使用小火箭订阅。不要将包含令牌的个人链接公开。",
-        "资料列出Windows的Clash Party、Clash Verge Rev、v2rayN；macOS的Clash Party、Clash Verge Rev；Android的v2rayNG、Clash Meta for Android；iOS的Shadowrocket。这里只整理来源支持范围，具体安装包与当前系统兼容性需查看客户端官方发布。",
-        "Android电视与盒子可按资料安装相应Android客户端；路由器无官方固件，资料举例OpenClash导入Clash订阅，且暂无专用电视或路由器教程。全部设备共用套餐流量，不按设备另收费。"
+        "怎么使用？能用Clash或小火箭吗？",
+        "普通套餐不提供可导入第三方客户端的订阅链接；私人订阅链接需购买高付费套餐并持有邀请码，再向官方客服申请。注册、下载与使用方式以官网和用户中心说明为准，不要将包含令牌的个人链接公开。",
+        "资料列出的Clash Party、Clash Verge Rev、v2rayN、v2rayNG、Clash Meta for Android与Shadowrocket都是第三方客户端，只适用于已获批私人订阅链接的用户；具体安装包与系统兼容性需查看客户端官方发布。",
+        "资料提到的电视、盒子与路由器（OpenClash）用法同样依赖私人订阅链接，暂无专用教程。全部设备共用套餐流量，不按设备另收费。"
       ],
       [
         "流媒体、AI与定制",
@@ -413,8 +413,8 @@ export const additionalBrands = [
     ],
     "faqs": [
       [
-        "灵动云是否提供第三方订阅？",
-        "提供，按资料需在开通套餐后向客服或工单领取对应格式；并非本页生成服务商订阅。"
+        "灵动云能用Clash或小火箭吗？",
+        "普通套餐不能，不提供可导入第三方客户端的订阅链接；私人订阅链接需购买高付费套餐并持有邀请码，再向官方客服申请。"
       ],
       [
         "ld888可以用于穿云吗？",
@@ -437,9 +437,9 @@ export const additionalBrands = [
     "source": "品牌官方提供资料",
     "url": "https://varnexa.invisibleaff.com",
     "affiliate": false,
-    "tagline": "IEPL线路声明，客户端与订阅两种方式；周期流量和一次性额度分别提供。",
-    "title": "隐形人：IEPL套餐、第三方订阅与yxr888新人八折优惠",
-    "description": "白银纪元144 GB/月、¥24/月；年度入门80 GB、¥109/年。整理IEPL、设备兼容、流量包与yxr888首单优惠。",
+    "tagline": "IEPL线路声明，客户端由品牌方提供；周期流量和一次性额度分别提供。",
+    "title": "隐形人：IEPL套餐、使用方式与yxr888新人八折优惠",
+    "description": "隐形人套餐资料：白银纪元月付¥24、144 GB/月，年度入门¥109/年、80 GB；主打IEPL线路，不限设备并共享套餐流量，客户端由品牌方提供，并说明流量包与yxr888首单八折规则。",
     "monthly": "¥24/月 · 144 GB/月",
     "annual": "¥109/年 · 80 GB/30天",
     "architecture": "IEPL；全局协议与倍率尚未完整说明",
@@ -528,7 +528,7 @@ export const additionalBrands = [
       ],
       [
         "设备与客户端兼容",
-        "资料写Windows、macOS、iOS、Android、电视和盒子支持，路由器支持导入订阅；使用方式包含客户端和订阅，支持Clash及Shadowrocket。客户端下载需通过品牌方获取，具体客户端名称、最低系统及订阅格式应在购买前核对。",
+        "资料写Windows、macOS、iOS、Android、电视和盒子支持，客户端下载需通过品牌方获取。普通套餐不提供可导入第三方客户端的订阅链接；资料提到的Clash、Shadowrocket和路由器导入，只适用于获批私人订阅链接的用户，私人订阅链接需购买高付费套餐并持有邀请码，再向官方客服申请。具体客户端名称与最低系统应在购买前核对。",
         "资料说明不限设备且共享流量。一次性包也标注不限设备，其中精英包补充说明以品牌方确认为准，应核对所购产品的具体条款。"
       ],
       [
@@ -552,8 +552,8 @@ export const additionalBrands = [
         "部分套餐说明提供这些周期，但除年度入门外没有列出相应价格，所以本页只展示实际提供的标价。"
       ],
       [
-        "隐形人可以使用第三方客户端吗？",
-        "资料写支持Clash、小火箭和路由器订阅，具体格式、应用与系统版本需在品牌方确认。"
+        "隐形人可以用Clash或小火箭吗？",
+        "普通套餐不能。私人订阅链接需购买高付费套餐并持有邀请码，再向官方客服申请；获批后才可按资料使用Clash、小火箭或路由器导入。"
       ],
       [
         "马来西亚节点有多少个？",
@@ -570,7 +570,7 @@ export const additionalBrands = [
     "affiliate": true,
     "tagline": "VLESS与IPLC线路声明，60—1000 GB月流量，另有100 GB固定总量包。",
     "title": "FireFly萤火虫：IPLC套餐价格与firefly新人八折优惠",
-    "description": "150GB/月，月付¥25起；整理FireFly 萤火虫套餐价格、使用方式及优惠适用条件，区分品牌声明与待确认信息。",
+    "description": "FireFly萤火虫套餐资料：月付¥25起、150 GB/月，年度轻量¥96/年；IPLC、VLESS与原生IP，不限制设备数量，另有100 GB不限时包，并说明firefly新人八折的适用条件。",
     "monthly": "¥25/月 · 150GB/月",
     "annual": "¥96/年 · 60GB/月",
     "architecture": "IPLC、VLESS、原生IP（品牌声明）",
@@ -811,9 +811,9 @@ export const additionalBrands = [
     "url": "https://wzjc.sogoyunaff.cc/#/?code=JvxcPy2A",
     "official": "https://sogocloud.world/",
     "affiliate": true,
-    "tagline": "VLESS与IEPL／IPLC线路声明，提供多周期月流量与四档不限时包，资料列出第三方客户端。",
-    "title": "Sogo云：IEPL／IPLC套餐、第三方客户端与新人九折优惠",
-    "description": "150GB/月，月付¥25起；整理Sogo云套餐价格、使用方式及优惠适用条件，区分品牌声明与待确认信息。",
+    "tagline": "VLESS与IEPL／IPLC线路声明，提供多周期月流量与四档不限时包。",
+    "title": "Sogo云：IEPL／IPLC套餐、使用方式与新人九折优惠",
+    "description": "Sogo云套餐资料：月付¥25起、150 GB/月，年度轻量¥98/年；IEPL／IPLC线路与VLESS，资料标注不限设备和原生IP，提供四档不限时包，并说明使用方式与新人九折的适用条件。",
     "monthly": "¥25/月 · 150GB/月",
     "annual": "¥98/年 · 60GB/月",
     "architecture": "IEPL／IPLC、VLESS、三网优化（资料声明）",
@@ -1048,7 +1048,7 @@ export const additionalBrands = [
     "sections": [
       [
         "线路、节点与峰值",
-        "资料同时记载IEPL与IPLC专线及三网优化，不表示每个节点同时使用两种线路。协议VLESS，标注原生IP、不限速及不限客户端和设备。",
+        "资料同时记载IEPL与IPLC专线及三网优化，不表示每个节点同时使用两种线路。协议VLESS，标注原生IP、不限速及不限设备数量。",
         "节点60+、覆盖港台日新美等多地是来源记录；具体分布与当前状态未独立核实。单节点峰值最高2.5Gbps为品牌标示，不是个人持续保证速率。品牌于2026年创立，团队8年经验并非品牌运营时长。"
       ],
       [
@@ -1059,7 +1059,7 @@ export const additionalBrands = [
       ],
       [
         "客户端、企业定制与支付",
-        "资料列Clash、Shadowrocket、v2rayN，并记载iOS、Android、Windows及路由器支持；具体版本、格式和安装要求以服务方教程为准，未提供的系统不自行补列。",
+        "资料记载iOS、Android、Windows及路由器支持。普通套餐不提供可导入第三方客户端的订阅链接；资料列出的Clash、Shadowrocket、v2rayN只适用于获批私人订阅链接的用户，私人订阅链接需购买高付费套餐并持有邀请码，再向官方客服申请。具体版本与安装要求以服务方教程为准，未提供的系统不自行补列。",
         "USDT（TRC20）、微信、支付宝为来源支付方式，资料写无免费试用。企业定制的地区、带宽、IP、SLA与价格需沟通；客服响应无明确时限，退款和重置费用未完整提供。"
       ],
       [
@@ -1091,7 +1091,7 @@ export const additionalBrands = [
     "affiliate": true,
     "tagline": "全IPLC与1×倍率声明，使用四平台官方客户端；月流量与固定总量包分别提供。",
     "title": "无忧链接：IPLC套餐、官方客户端与wuyou666八折优惠",
-    "description": "100GB/月，月付¥19起；整理无忧链接套餐价格、使用方式及优惠适用条件，区分品牌声明与待确认信息。",
+    "description": "无忧链接（WorryFree）套餐资料：月付¥19起、100 GB/月，年度轻量¥79/年；IPLC线路、全节点1×，提供四平台官方客户端，另有不限时包，并说明wuyou666八折的适用档位。",
     "monthly": "¥19/月 · 100GB/月",
     "annual": "¥79/年 · 40GB/月",
     "architecture": "IPLC、全节点1×；协议未提供",
@@ -1380,7 +1380,7 @@ export const additionalBrands = [
     "affiliate": true,
     "tagline": "BGP多线路调度与专线级出口声明，SS协议，常规周期与固定总量包分开选择。",
     "title": "全球云：BGP线路、Shadowsocks套餐价格与选购说明",
-    "description": "120GB/月，月付¥20起；整理全球云套餐价格、使用方式及优惠适用条件，区分品牌声明与待确认信息。",
+    "description": "全球云（Global Cloud）套餐资料：月付¥20起、120 GB/月，年度轻量¥99/年；BGP多线路调度与专线级出口，SS协议、全节点1×，常规套餐不限设备，另有三档不限时包可选。",
     "monthly": "¥20/月 · 120GB/月",
     "annual": "¥99/年 · 80GB/月",
     "architecture": "BGP多线、专线级出口、SS、全节点1×",

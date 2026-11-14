@@ -4,15 +4,12 @@ import '@fontsource/jetbrains-mono/500.css';
 import '../styles/global.css';
 import Loader from '../components/Loader.astro';
 import Mark from '../components/Mark.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import {siteInfoPages} from '../data/site-info';
+import { allLinks } from '../data/nav';
 
-const { title = '机场巡查博客', description = '机场推荐、VPS 与订阅使用笔记。', seo = false, canonicalPath } = Astro.props;
+const { title = '机场巡查博客', description = '机场推荐、VPS 与订阅使用笔记。', seo = false, canonicalPath, noindex = false } = Astro.props;
 const path = Astro.url.pathname;
-const nav = [
-  { label: '机场推荐', href: '/category/airports/' },
-  { label: 'VPS知识', href: '/catagory/vps/' },
-  { label: 'Clash', href: '/category/clash/' },
-  { label: '节点全超时？', href: '/tools/#diagnose' },
-];
 ---
 <!doctype html>
 <html lang="zh-CN">
@@ -25,8 +22,25 @@ const nav = [
     <link rel="icon" sizes="32x32" type="image/png" href="/favicon-32.png?v=2"/>
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
     <link rel="canonical" href={new URL(canonicalPath ?? path, Astro.site)}/>
-    <title>{title} · jichangxuncha.blog</title>
+    <link rel="alternate" type="application/rss+xml" title="机场巡查博客" href="/rss.xml"/>
+    {/* 标题后缀用中文站名；标题里已含“机场巡查”（首页、关于页）时不再重复 */}
+    <title>{title.includes('机场巡查') ? title : `${title} · 机场巡查`}</title>
+    {noindex && <meta name="robots" content="noindex,follow"/>}
     {seo && <slot name="seo"/>}
+    {/* 有专属 SEO 组件的页面自带 og 文字标签，这里只补分享图；其余页面补全一套。 */}
+    {!seo && <>
+      <meta property="og:type" content={path.startsWith('/posts/') ? 'article' : 'website'}/>
+      <meta property="og:locale" content="zh_CN"/>
+      <meta property="og:site_name" content="机场巡查博客"/>
+      <meta property="og:title" content={title}/>
+      <meta property="og:description" content={description}/>
+      <meta property="og:url" content={new URL(canonicalPath ?? path, Astro.site)}/>
+      <meta name="twitter:card" content="summary_large_image"/>
+    </>}
+    <meta property="og:image" content={new URL('/og.png', Astro.site)}/>
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="630"/>
+    <meta property="og:image:alt" content="机场巡查博客：机场推荐、VPS 知识与网络排查"/>
     <script is:inline>
       // 一次会话只看一次 loading；地址加 ?loader 可以强制重看。
       (function () {
@@ -44,23 +58,16 @@ const nav = [
   <body>
     <Loader/>
     <a class="skip" href="#main">跳到正文</a>
-    <header class="top">
-      <div class="wrap top-in">
-        <a class="brand" href="/" aria-label="机场巡查首页"><Mark/><span>机场巡查</span></a>
-        <nav aria-label="主导航">
-          {nav.map((n) => <a href={n.href} class:list={{'nav-troubleshoot':n.href.startsWith('/tools/')}} title={n.href.startsWith('/tools/')?'套餐已购买，节点却全部超时或报错？先排查网络与连接问题':undefined} aria-current={(path.startsWith(n.href.split('#')[0]) || n.href === '/catagory/vps/' && (path.startsWith('/vps/') || path === '/category/vps/')) ? 'page' : undefined}>{n.label}</a>)}
-        </nav>
-      </div>
-    </header>
+    <SiteHeader/>
     <main id="main"><slot/></main>
     <footer class="foot">
       <div class="wrap foot-in">
         <div class="foot-brand"><Mark size={36}/><p>保持观察，认真记录。</p></div>
         <div class="foot-col">
-          {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+          {allLinks().map((n) => <a href={n.href}>{n.label}</a>)}
         </div>
         <div class="foot-col">
-          <a href="/about/">关于本站</a>
+          {siteInfoPages.map(p=><a href={'/'+p.slug+'/'}>{p.label}</a>)}
           <span class="mono">© {new Date().getFullYear()} jichangxuncha.blog</span>
         </div>
       </div>

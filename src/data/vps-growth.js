@@ -138,7 +138,7 @@ export const growthArticles=[
     "slug": "vps-cost-comparison",
     "path": "/vps/vps-cost-comparison/",
     "title": "自建VPS和机场成本比较：月费、流量与维护时间怎么算",
-    "description": "用统一币种与周期计算服务器、IP、备份、流量超额及维护时间，提供可复算的假设示例，比较自建VPS与机场服务的真实成本。",
+    "description": "自建VPS和机场成本比较：用统一币种与周期计算服务器、IP、备份、流量超额和维护时间，附可复算的假设示例，看清两种方案每月的真实花费。",
     "lead": "比较成本时，不能拿一台服务器的促销月费与一个多地区套餐直接相减。先确认两种方案能否完成同一个任务，再把资源费用、预付金额、维护时间和故障成本放在同一张表里。",
     "category": "方案与成本",
     "sections": [
@@ -302,7 +302,7 @@ export const growthArticles=[
     "slug": "cheap-vps",
     "path": "/vps/cheap-vps/",
     "title": "便宜VPS怎么选？预算、资源限制与续费成本检查表",
-    "description": "从真实工作负载判断低预算VPS是否够用，检查共享CPU、内存、流量、IPv4与续费，避免只按首月标价或年付月均选择。",
+    "description": "便宜VPS怎么选？从真实工作负载判断低预算VPS是否够用，逐项检查共享CPU、内存、流量、IPv4与续费价格，避免只按首月标价或年付月均做决定。",
     "lead": "便宜VPS的选购重点，是用最低可行资源完成明确任务。本文不列促销榜单，也不预设某个固定价位；先减少无用配置，再确认资源和计费限制，通常比追逐未经验证的低价更有帮助。",
     "category": "方案与成本",
     "sections": [
@@ -427,7 +427,7 @@ export const growthArticles=[
     "slug": "hong-kong-vps",
     "path": "/vps/hong-kong-vps/",
     "title": "香港VPS怎么选？大陆访问、线路与带宽的判断方法",
-    "description": "针对面向中国大陆与邻近地区的网站，检查香港VPS去回程、三网差异、出站额度和IP，解释为什么地理接近不等于低延迟。",
+    "description": "香港VPS怎么选？面向中国大陆访客的网站，要分别检查去程回程、三网差异、出站流量额度和IP；本文解释为什么地理距离近不等于延迟低，并附购买前后的观察清单。",
     "lead": "香港VPS的选购重点不是“离我近”这一点，而是访客到机房的实际路径、应用负载与网络计费。本文面向建站、接口和远程管理需求，不提供未经验证的商家排名或延迟承诺。",
     "category": "地区与线路",
     "sections": [
@@ -564,7 +564,7 @@ export const growthArticles=[
     "slug": "japan-vps",
     "path": "/vps/japan-vps/",
     "title": "日本VPS怎么选？东京大阪、访客分布与资源费用",
-    "description": "按日本本地业务、东亚访客和跨境访问分别评估VPS，比较东京大阪选区、IPv4/IPv6、CPU架构、备份与流量计费。",
+    "description": "日本VPS怎么选？按日本本地业务、东亚访客和跨境访问三种目标分别评估，比较东京与大阪选区、IPv4/IPv6、CPU架构、备份方式与流量计费。",
     "lead": "选择日本VPS，先区分“服务日本用户”与“从中国大陆访问日本机房”两种目标。东京或大阪的地区名称只是位置线索，应用依赖、运营商互联与实例资源才决定是否适合任务。",
     "category": "地区与线路",
     "sections": [
@@ -690,7 +690,7 @@ export const growthArticles=[
     "slug": "vps-network-lines",
     "path": "/vps/vps-network-lines/",
     "title": "VPS线路怎么看？CN2、CMI、CMIN2、AS9929与BGP解释",
-    "description": "区分运营商网络、ASN、BGP和商家优化标签，说明去程回程、三网差异及路由观察边界，避免把线路名称当成速度保证。",
+    "description": "VPS线路怎么看？解释CN2、CMI、CMIN2、AS9929与BGP等常见线路名称，区分运营商网络、ASN和商家优化标签，说明去程回程与三网差异，避免把线路名当成速度保证。",
     "lead": "线路名称常把网络归属、产品等级与宣传用语放在一起。判断VPS连接条件时，先弄清每个词描述什么，再核对具体套餐承诺与实际路径；本文解释术语，不为任何商家验证采购或性能。",
     "category": "地区与线路",
     "sections": [
@@ -855,7 +855,7 @@ export const growthArticles=[
     "slug": "vps-ip-blocked",
     "path": "/vps/vps-ip-blocked/",
     "title": "VPS IP无法连接怎么办？先区分地址不可达与访问限制",
-    "description": "从实例状态、公网IP、IPv4/IPv6、DNS、防火墙与不同网络对照排查VPS不可达，不把ping失败或网页打不开直接认定为IP被封。",
+    "description": "VPS IP无法连接怎么办？从实例状态、公网IP、IPv4/IPv6、DNS、防火墙与不同网络对照逐步排查，不把ping不通或网页打不开直接认定为IP被封。",
     "lead": "“VPS IP被封”是用户描述，不是已经确认的诊断。IP可能变更、实例可能停机、端口可能被规则拦截，目标应用也可能只拒绝部分出口。先确认失败对象和范围，再决定恢复、联系服务商或迁移。",
     "category": "故障排查",
     "sections": [
@@ -992,7 +992,7 @@ export const growthArticles=[
     "slug": "vps-timeout",
     "path": "/vps/vps-timeout/",
     "title": "VPS连接超时怎么排查？从TCP端口到SSH与应用日志",
-    "description": "按超时、拒绝、认证失败和HTTP错误分层排查VPS连接，提供只读检查命令、恢复前提和记录模板，不建议关闭全部防火墙。",
+    "description": "VPS连接超时怎么排查？按超时、拒绝连接、认证失败和HTTP错误分层检查，提供只读检查命令、恢复前提和记录模板，不建议关闭全部防火墙。",
     "lead": "连接超时表示某一步没有在等待期限内完成，并没有自动说明原因。先保存准确错误、目标和时间，再从资源状态、地址、传输连接到应用逐层检查；不同错误应走不同路径。",
     "category": "故障排查",
     "sections": [
@@ -1142,7 +1142,7 @@ export const growthArticles=[
     "slug": "reverse-proxy",
     "path": "/vps/reverse-proxy/",
     "title": "VPS反向代理是什么？网站入口、HTTPS与后端排查",
-    "description": "从网站访问路径解释反向代理、后端监听、HTTPS证书与超时，提供502和504的排查顺序及缓存、请求头和访问控制注意事项。",
+    "description": "VPS反向代理是什么？从网站访问路径讲清反向代理、后端监听、HTTPS证书与超时设置，给出502和504错误的排查顺序，以及缓存、请求头和访问控制的注意事项。",
     "lead": "反向代理位于网站访客与后端应用之间，将请求交给对应的服务。它常用于统一网站入口、处理HTTPS或分发流量。理解这一层，能帮助区分域名、入口连接与应用本身的问题。",
     "category": "基础入门",
     "sections": [

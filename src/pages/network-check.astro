@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import {probeTargets} from '../lib/network-check.js';
 ---
-<Layout title="网络连通性检测｜检查当前网络与跨境访问" description="从自己的浏览器检测基础连接、国内参照和跨境参照响应，辅助判断当前网络状况，不替代具体机场线路试用。">
+<Layout title="网络连通性检测｜检查当前网络与跨境访问" description="网络连通性检测：用当前浏览器检测基础连接、国内参照站和跨境参照站的响应，判断网页打不开、节点连不上是不是本地网络的问题；购买前可先自查，不替代具体机场线路试用。">
 <div class="wrap network-page"><header class="page-head"><a class="mono" href="/category/airports/">← 返回机场推荐</a><span class="mono">CHECK YOUR CONNECTION</span><h1>先测自己的网络。</h1><p>用你当前的设备与网络，检查基础连接、国内参照和跨境参照的响应情况。适合购买前初步排查，也可以切换Wi-Fi、移动数据或当前代理状态后重新比较。</p></header>
 <section class="test-panel" aria-labelledby="test-title"><div class="test-intro"><div><h2 id="test-title">当前网络连通性检测</h2><p>每个目标连续请求3次，每次最多等待8秒。不会读取或要求提供订阅链接、账号、密码、IP地址或位置。</p></div><div class="test-controls"><button id="start-check" type="button">开始检测</button><button id="stop-check" type="button" disabled>停止</button></div></div>
 <p class="test-explanation">检测只有在你点击后开始。浏览器会向下方站点发起少量请求，目标站点会收到正常连接信息；本站不上传或保存检测结果。请保持你打算使用的网络状态，已开代理时结果会包含该代理的影响。</p>

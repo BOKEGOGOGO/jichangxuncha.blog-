@@ -1,0 +1,154 @@
+---
+import Mark from './Mark.astro';
+import { mainNav, navGroups, troubleshoot, isCurrent, currentGroup } from '../data/nav';
+import { siteInfoPages } from '../data/site-info';
+const path = Astro.url.pathname;
+const toolsCurrent = path === '/tools/';
+const activeGroup = currentGroup(path);
+---
+<header class="top" id="top">
+  <div class="wrap top-in">
+    <a class="brand" href="/" aria-label="机场巡查首页"><Mark/><span>机场巡查</span></a>
+
+    <nav class="nav-main" aria-label="主导航">
+      {mainNav.map((n) => <a class:list={['nav-link', { 'nav-mobile-only': n.mobileOnly }]} href={n.href} aria-current={isCurrent(path, n.match) ? 'page' : undefined}>{n.label}</a>)}
+      {navGroups.map((g) => (
+        <div class="nav-group" data-group>
+          <button type="button" class="nav-link nav-btn" aria-expanded="false" aria-controls={`panel-${g.id}`} data-current={activeGroup === g.id ? 'true' : undefined}>
+            {g.label}<svg viewBox="0 0 12 12" width="10" height="10" aria-hidden="true"><path d="m2.5 4.5 3.5 3.5 3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+          </button>
+          <div class="nav-panel" id={`panel-${g.id}`}>
+            {g.items.map((i) => <a href={i.href} aria-current={path === i.href ? 'page' : undefined}><strong>{i.label}</strong><small>{i.desc}</small></a>)}
+          </div>
+        </div>
+      ))}
+      <a class="nav-troubleshoot" href={troubleshoot.href} title={troubleshoot.title} aria-current={toolsCurrent ? 'page' : undefined}>{troubleshoot.label}</a>
+    </nav>
+
+    <div class="top-actions">
+      <a class="icon-btn" href="/search/" aria-label="站内搜索" aria-current={path === '/search/' ? 'page' : undefined}><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+      <button type="button" class="icon-btn menu-btn" aria-expanded="false" aria-controls="mnav" aria-label="打开菜单">
+        <svg class="i-open" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="i-close" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="mnav" id="mnav" hidden>
+    <div class="wrap mnav-in">
+      <section>
+        <p class="mono mnav-label">栏目</p>
+        {mainNav.filter((n) => !n.mobileOnly).map((n) => <a href={n.href}>{n.label}</a>)}
+        <a href={troubleshoot.href}>{troubleshoot.label}</a>
+      </section>
+      {navGroups.map((g) => (
+        <section>
+          <p class="mono mnav-label">{g.label}</p>
+          {g.items.map((i) => <a href={i.href}>{i.label}</a>)}
+        </section>
+      ))}
+      <section>
+        <p class="mono mnav-label">关于</p>
+        {siteInfoPages.map((p) => <a href={`/${p.slug}/`}>{p.label}</a>)}
+      </section>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('top');
+  if (header) {
+    const groups = [...header.querySelectorAll<HTMLElement>('[data-group]')];
+    const setOpen = (g: HTMLElement, open: boolean) => {
+      g.classList.toggle('open', open);
+      g.querySelector('button')!.setAttribute('aria-expanded', String(open));
+    };
+    const closeAll = (except?: HTMLElement) => groups.forEach((g) => g !== except && setOpen(g, false));
+
+    groups.forEach((g) => {
+      const btn = g.querySelector('button')!;
+      // 鼠标悬停时已经展开，再点击不应把它收起；键盘和触屏点击则是开关切换
+      btn.addEventListener('click', (e) => {
+        const byMouse = (e as PointerEvent).pointerType === 'mouse';
+        const open = byMouse ? true : !g.classList.contains('open');
+        closeAll(g); setOpen(g, open);
+      });
+      // 鼠标设备悬停即展开，离开后收起
+      g.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') { closeAll(g); setOpen(g, true); } });
+      g.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') setOpen(g, false); });
+      g.addEventListener('focusout', (e) => { if (!g.contains(e.relatedTarget as Node)) setOpen(g, false); });
+    });
+
+    const menuBtn = header.querySelector<HTMLButtonElement>('.menu-btn')!;
+    const mnav = document.getElementById('mnav')!;
+    const setMenu = (open: boolean) => {
+      mnav.hidden = !open;
+      menuBtn.setAttribute('aria-expanded', String(open));
+      menuBtn.setAttribute('aria-label', open ? '关闭菜单' : '打开菜单');
+      header.classList.toggle('menu-open', open);
+    };
+    menuBtn.addEventListener('click', () => setMenu(mnav.hidden));
+
+    document.addEventListener('click', (e) => { if (!header.contains(e.target as Node)) { closeAll(); } });
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      const open = groups.find((g) => g.classList.contains('open'));
+      if (open) { setOpen(open, false); open.querySelector('button')!.focus(); }
+      else if (!mnav.hidden) { setMenu(false); menuBtn.focus(); }
+    });
+    matchMedia('(min-width: 900px)').addEventListener('change', (m) => { if (m.matches) setMenu(false); });
+  }
+</script>
+
+<style>
+  .top{position:sticky;top:0;z-index:40;background:var(--paper);border-bottom:1px solid var(--line);view-transition-name:top}
+  .top-in{position:relative;display:flex;align-items:center;gap:clamp(16px,2.4vw,32px);min-height:64px}
+  .brand{display:flex;align-items:center;gap:10px;flex:none;font:500 17px var(--head)}
+  .nav-main{display:flex;align-items:center;gap:clamp(14px,2.2vw,30px);margin-left:auto;font-size:15px}
+  .nav-link{position:relative;display:flex;align-items:center;gap:6px;min-height:44px;padding:0;border:0;background:none;color:var(--ink);font:inherit;cursor:pointer;transition:color .15s}
+  .nav-link:hover,.nav-link[aria-current],.nav-btn[data-current]{color:var(--accent)}
+  .nav-link[aria-current]::after,.nav-btn[data-current]::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:2px;background:var(--accent)}
+  .nav-btn svg{transition:transform .18s}
+  .nav-group{position:relative}
+  .nav-group.open .nav-btn{color:var(--accent)}
+  .nav-group.open .nav-btn svg{transform:rotate(180deg)}
+  .nav-panel{position:absolute;top:calc(100% + 10px);left:-16px;z-index:5;display:none;min-width:280px;padding:8px 0;background:var(--paper);border:1px solid var(--line);border-top:2px solid var(--ink);box-shadow:0 16px 36px rgba(21,24,26,.08)}
+  /* 透明桥接，鼠标从按钮移到面板时不会断开 */
+  .nav-panel::before{content:"";position:absolute;left:0;right:0;top:-12px;height:12px}
+  .nav-group.open .nav-panel{display:block}
+  .nav-panel a{display:block;padding:9px 16px;transition:background .15s}
+  .nav-panel strong{display:block;font:500 15px/1.5 var(--head);transition:color .15s}
+  .nav-panel small{display:block;font-size:13px;line-height:1.5;color:var(--muted)}
+  .nav-panel a:hover,.nav-panel a:focus-visible{background:#0b7a550a}
+  .nav-panel a:hover strong,.nav-panel a[aria-current] strong{color:var(--accent)}
+
+  /* 常驻故障排查入口：清晰可读的绿色发光，不闪烁 */
+  .nav-troubleshoot{position:relative;display:flex;align-items:center;min-height:40px;padding:0 13px;color:#075d40;background:#e6f4eb;border:1px solid #84caa1;border-radius:4px;box-shadow:0 0 13px #1583542b,inset 0 0 9px #ffffff9c;text-shadow:0 0 9px #73c99566;font-weight:500;white-space:nowrap;transition:background .15s,border-color .15s,box-shadow .15s}
+  .nav-troubleshoot:hover,.nav-troubleshoot:focus-visible{color:#044b33;background:#d9efdf;border-color:#368f60;box-shadow:0 0 18px #15835452}
+  .nav-troubleshoot[aria-current]::after{content:"";position:absolute;left:12px;right:12px;bottom:4px;height:2px;background:#177b50}
+
+  .top-actions{display:flex;align-items:center;flex:none;margin-right:-10px}
+  .icon-btn{display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;background:none;color:var(--ink);cursor:pointer;transition:color .15s}
+  .icon-btn:hover,.icon-btn[aria-current]{color:var(--accent)}
+  .menu-btn{display:none}
+  .menu-btn .i-close,.menu-open .menu-btn .i-open{display:none}
+  .menu-open .menu-btn .i-close{display:block}
+
+  .mnav{border-top:1px solid var(--line);background:var(--paper)}
+  .mnav-in{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;padding-block:20px 28px}
+  .mnav-label{margin-bottom:6px;color:var(--muted);font-weight:500}
+  .mnav a{display:flex;align-items:center;min-height:40px;font-size:15px;transition:color .15s}
+  .mnav a:hover{color:var(--accent)}
+
+  @media(max-width:899px){
+    .top{position:static}
+    .top-in{flex-wrap:wrap;row-gap:0;padding-top:10px}
+    .top-actions{margin-left:auto}
+    .menu-btn{display:grid}
+    .nav-main{order:3;width:100%;margin:0;justify-content:space-between;gap:8px;font-size:14px}
+    .nav-group{display:none}
+    :global(html){scroll-padding-top:0}
+  }
+  @media(max-width:420px){.nav-troubleshoot{padding:0 9px}}
+  @media(min-width:900px){.mnav,.nav-mobile-only{display:none}}
+</style>

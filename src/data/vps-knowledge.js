@@ -7,7 +7,7 @@ const comparison='/vps/guides/vps-vs-airport/';
 const extra={
 'what-is-vps':{category:'基础入门',keyword:'VPS是什么',faqs:[['VPS能用来做网站吗？','可以运行适配的Web程序与数据库，但也要负责更新、备份与网络配置；静态站点也可比较无需自管的托管方案。'],['VPS是买断的一台电脑吗？','通常是按约定周期使用的资源服务，不是买断物理机器。资源类型、计费与维护责任需要看产品说明。']]},
 'how-to-choose-vps':{category:'方案与成本',keyword:'VPS配置怎么选',faqs:[['先选CPU还是先看用途？','先确定应用、访问量和依赖，再比较CPU类型、内存与网络，避免单看核数。'],['带宽和流量一样吗？','不同。带宽是速率能力，流量是累计数据量；还需核对计费方向、单位和超额规则。']]},
-'regions-and-routing':{category:'地区与线路',keyword:'VPS机房地区怎么选',title:'VPS机房地区怎么选？按访客、依赖与迁移需求决策',description:'以访客分布、应用依赖、数据恢复与跨区传输为依据选择VPS机房，建立地区决策流程；线路术语和香港日本细节转到独立指南。',faqs:[['应该把服务器放在离自己最近的地方吗？','面向访客的服务应优先考虑实际用户和应用依赖。地理位置只是因素之一，还应核对路由、资源与恢复方式。'],['两个地区部署就是容灾吗？','不是。还需要数据复制、健康检查、切换流程和恢复验证，且会增加成本。']]},
+'regions-and-routing':{category:'地区与线路',keyword:'VPS机房地区怎么选',title:'VPS机房地区怎么选？按访客、依赖与迁移需求决策',description:'VPS机房地区怎么选？以访客分布、应用依赖、数据恢复与跨区传输为依据，建立一份地区决策表；香港、日本等地区细节和线路术语另有独立指南。',faqs:[['应该把服务器放在离自己最近的地方吗？','面向访客的服务应优先考虑实际用户和应用依赖。地理位置只是因素之一，还应核对路由、资源与恢复方式。'],['两个地区部署就是容灾吗？','不是。还需要数据复制、健康检查、切换流程和恢复验证，且会增加成本。']]},
 'ssh-connection':{category:'故障排查',keyword:'VPS SSH连接教程',faqs:[['忘记用户名可以随便尝试root吗？','先查看镜像和服务商说明，使用已授权用户。错误用户会造成认证失败，不应反复猜测密码。'],['主机指纹变化能直接忽略吗？','不能。先通过可信控制台核实重装、IP复用或主机变更，再按实际情况处理已有记录。']]},
 'vps-vs-airport':{category:'方案与成本',keyword:'自建VPS与机场哪个好',title:'自建VPS与机场哪个好？技术门槛、维护与适用人群比较',description:'比较自建VPS与机场服务的技术门槛、维护责任、多地区节点、费用和故障处理，按建站、学习与日常连接需求选择，说明双方风险与推广关系。',conversion:'comparison',faqs:[['建站可以用机场替代VPS吗？','不可以。机场通常交付代理连接，不能代替运行网站或数据库的服务器环境。'],['机场比自建一定稳定吗？','不能保证。自建有实例与维护风险，现成服务有节点、客服与经营风险，需按实际条件比较。'],['不懂Linux应该先买哪个？','先明确用途。需要建站可比较托管平台；只需要网络连接且不想维护服务器，可了解现成服务，但仍需核对客户端、隐私与售后。']]}
 };
@@ -34,7 +34,7 @@ export const knowledgeGroups=[
 {id:'troubleshooting',title:'故障排查',summary:'从准确错误开始，逐层检查地址、服务与访问路径。',slugs:['vps-ip-blocked','vps-timeout','ssh-connection']}
 ];
 export const knowledgeFaqs=[['完全不懂服务器，应该从哪里开始？','先读VPS是什么，确定是否需要运行应用；再读配置与SSH教程。不需要服务器管理能力的人，可以先了解托管与现成连接服务的边界。'],['这里有没有VPS商家排行榜？','本知识中心不提供未经验证的商家评分、测速榜或最低价承诺，重点是选择方法、技术原理和排查步骤。'],['VPS不能连接就一定是IP被封吗？','不是。停机、地址变更、防火墙、监听、DNS和网络策略都可能影响连接，应先确认失败阶段与范围。'],['学习VPS一定要购买机场吗？','不需要。建站、数据库和开发环境具有独立用途，机场不能替代服务器。只有需要减少连接服务维护的读者才有必要继续比较。'],['代码示例能直接复制执行吗？','先确认适用系统、权限和文档示例目标。本文以只读检查和说明为主，示例域名与保留IP需换为自己的资源，不要对第三方目标执行操作。']];
-export const knowledgePaths=['/catagory/vps/','/vps/guides/',...knowledgeArticles.map(a=>a.path),'/vps/providers/','/vps/providers/digitalocean/','/vps/providers/hetzner/'];
+export const knowledgePaths=['/category/vps/','/vps/guides/',...knowledgeArticles.map(a=>a.path),'/vps/providers/','/vps/providers/digitalocean/','/vps/providers/hetzner/'];
 
 export const knowledgeDecisions={
 'what-is-vps':['先确定你真正需要的交付','如果要运行网站或学习Linux，继续按应用选择资源。如果只需要日常网络连接、并不打算管理服务器，可以先比较现成代理服务与自建环境的差别。','机场和VPS有什么区别？'],
@@ -54,3 +54,5 @@ knowledgeBySlug("vps-vs-airport").sections.push(...[{"id": "exit-and-recovery", 
 knowledgeBySlug("vps-vs-airport").updated="2026-11-10";
 knowledgeBySlug("regions-and-routing").sections.push(...[{"id": "hongkong-japan-us", "title": "香港、日本与美国：地区只是决策的一列", "paragraphs": ["香港可能因地理邻近而被大陆用户先考虑，日本常被用于当地访问或业务依赖，美国则可能更靠近美洲用户与相关服务。以上是场景线索，不是延迟排名；大陆用户访问美国仍应按实际路由和时段观察，不能把机房国家等同专线或稳定跨境。", "若主要访客在美国，服务器靠近管理员不一定合理；若数据库在另一洲，应用反复跨区查询也可能抵消前端地区优势。先标明用户、数据库与API分布，再比较资源和路径。"], "table": {"headers": ["场景", "更重要的核对项", "避免的误区"], "rows": [["大陆访问香港或日本", "去回程、运营商、带宽与时段", "近就必然低延迟"], ["服务美洲用户", "实际访客与依赖位置、跨区费用", "只看管理员所在位置"], ["多地区部署", "一致性、切换、备份与预算", "多买一台就等于容灾"]]}, "links": [{"label": "理解网络指标与传输", "href": "/knowledge/network-transport/"}, {"label": "长期维护与恢复", "href": "/knowledge/vps-maintenance/"}]}]);
 knowledgeBySlug("regions-and-routing").updated="2026-11-10";
+
+knowledgeBySlug("vps-vs-airport").sections.push({"id": "commercial-service-boundary", "title": "如果也在比较商业连接服务", "paragraphs": ["原有比较关注自管VPS与机场的部署、维护和恢复。若还想比较商业VPN的交付、设备、费用和隐私边界，可读三方决策专题；三者不能完全替代，也没有普遍更快或更安全的一方。"], "links": [{"label": "VPS、机场与商业VPN的交付差异", "href": "/knowledge/vps-airport-commercial-vpn/"}]});
