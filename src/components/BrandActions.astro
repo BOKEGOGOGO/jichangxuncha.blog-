@@ -12,6 +12,7 @@ const inDirectory=Astro.url.pathname==='/category/airports/';
   ? <a class="primary-action" href={`/register/${slug}/`} rel="nofollow">前往官方 →</a>
   : primary && <a class="primary-action" href={primary} target="_blank" rel="noopener noreferrer">前往官方 ↗</a>}
 <div class="secondary-actions">{b?.official ? <a href={b.official} target="_blank" rel="noopener noreferrer">官方网站 ↗</a> : null}<a href={inDirectory?'#dossier-'+slug:'/posts/'+slug+'/'} data-brand-open={inDirectory?slug:undefined} data-brand-name={inDirectory?b?.zh:undefined} aria-haspopup={inDirectory?'dialog':undefined} aria-controls={inDirectory?'brand-profile-dialog':undefined}>品牌资料 →</a><a href="/tools/#diagnose">检查我的网络是否限制代理 →</a></div>
-<p class="disclosure">官方合作推广说明：通过合作链接购买，本站可能获得佣金；这不会影响你的正常购买与使用，也不会额外增加你的付款金额。套餐价格与优惠以官方结算页为准。</p>
+{/* 只有带推广链接的品牌才有佣金说明；机场推荐页在品牌列表上方统一说明一次，不在每个按钮下重复 */}
+{b?.affiliate && !inDirectory && <p class="disclosure">推广说明：通过合作链接购买，本站可能获得佣金；这不会影响你的正常购买与使用，也不会额外增加你的付款金额。套餐价格与优惠以官方结算页为准。</p>}
 </div>
 <style>.brand-actions{margin-top:24px}.primary-action{display:inline-flex;align-items:center;min-height:44px;gap:12px;border-bottom:1px solid var(--ink);font-weight:500}.primary-action:hover{color:var(--accent);border-color:var(--accent)}.secondary-actions{display:flex;flex-wrap:wrap;gap:12px 24px;margin-top:12px;font-size:13px;color:var(--muted)}.secondary-actions a{display:inline-flex;align-items:center;min-height:36px}.secondary-actions a:hover{color:var(--accent)}.disclosure{font-size:12px;color:var(--muted);line-height:1.8;margin-top:8px}</style>

@@ -24,19 +24,6 @@ const hubs: Record<string, string> = {
 
 // 文章数据里没有单独记录修改日期、但正文或标题改过的页面
 const changed: Record<string, string> = {
-  // 品牌页：页首摘要改写；其中 6 家去掉了“官方网站：待补充”
-  '/posts/flyv/': '2026-11-14',
-  '/posts/muguang/': '2026-11-14',
-  '/posts/weifeng/': '2026-11-14',
-  '/posts/feimao/': '2026-11-14',
-  '/posts/wavenet/': '2026-11-14',
-  '/posts/lingdong/': '2026-11-14',
-  '/posts/invisible/': '2026-11-14',
-  '/posts/firefly/': '2026-11-14',
-  '/posts/sogo/': '2026-11-14',
-  '/posts/wuyou/': '2026-11-14',
-  '/posts/quanqiuyun/': '2026-11-14',
-  '/posts/vps-checklist/': '2026-11-14',
   // 标题与 H1 改写
   '/knowledge/node-timeout/': '2026-11-14',
   '/knowledge/plan-costs/': '2026-11-14',
@@ -49,8 +36,8 @@ const changed: Record<string, string> = {
 export function GET() {
   const rows: [string, string][] = [
     ...Object.entries(hubs),
-    // 新增品牌或文章时自动进入站点地图
-    ...posts.map((p): [string, string] => [`/posts/${p.slug}/`, p.date]),
+    // 新增品牌或文章时自动进入站点地图；品牌页日期取 posts.js 里的 updated
+    ...posts.map((p): [string, string] => [`/posts/${p.slug}/`, p.updated ?? p.date]),
     ...libraryArticles.map((a): [string, string] => [a.path, a.updated ?? libraryUpdated]),
     ...knowledgePaths.filter((p) => p !== '/category/vps/' && p !== '/vps/guides/').map((p): [string, string] => [p, knowledgeUpdated]),
     ...siteInfoPages.map((p): [string, string] => [`/${p.slug}/`, siteInfoUpdated]),

@@ -47,6 +47,9 @@ const faqs = [
   ['通过本站链接购买会多花钱吗？', '不会。部分品牌入口是合作推广链接，本站可能从中获得一小笔佣金，用来维持网站运行，不会增加你的付款金额。'],
 ];
 
+// 首页定位：站名入口 + 栏目导航。“机场推荐”只作为栏目之一出现，主承接页仍是 /category/airports/。
+const pageTitle = '机场巡查博客｜机场推荐、Clash教程、VPS与网络故障排查';
+const pageDesc = `机场巡查博客整理${brandCount}家机场品牌与套餐资料、Clash客户端教程、VPS服务器知识及节点超时排查方法，帮助读者比较网络服务并解决连接问题。`;
 const site = 'https://jichangxuncha.blog/';
 const graph = {
   '@context': 'https://schema.org',
@@ -54,11 +57,12 @@ const graph = {
     { '@type': 'WebSite', '@id': site + '#website', url: site, name: '机场巡查博客', alternateName: 'jichangxuncha.blog', inLanguage: 'zh-CN', publisher: { '@id': site + '#org' },
       potentialAction: { '@type': 'SearchAction', target: site + 'search/?q={search_term_string}', 'query-input': 'required name=search_term_string' } },
     { '@type': 'Organization', '@id': site + '#org', name: '机场巡查博客', url: site, logo: site + 'logo-mark.png' },
+    { '@type': 'WebPage', '@id': site + '#webpage', url: site, name: pageTitle, description: pageDesc, inLanguage: 'zh-CN', isPartOf: { '@id': site + '#website' }, about: { '@id': site + '#org' } },
     { '@type': 'FAQPage', '@id': site + '#faq', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) },
   ],
 };
 ---
-<Layout title="机场巡查博客｜专线机场资料、客户端教程与节点故障排查" description={`收录 ${brandCount} 家专线机场的套餐、线路与优惠资料，提供 Clash、小火箭、v2rayN 等客户端教程，以及节点超时、晚高峰变慢等问题的排查方法。`}>
+<Layout title={pageTitle} description={pageDesc}>
   <script type="application/ld+json" set:html={JSON.stringify(graph).replace(/</g, '\\u003c')}/>
   <div class="wrap">
     <section class="hero">

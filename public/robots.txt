@@ -1,7 +1,7 @@
-# 全站开放抓取；/register/ 是合作推广（返佣）确认页，不让搜索引擎读取。
-# 这些页面同时带 noindex 与 X-Robots-Tag，站内指向它们的链接也带 rel="nofollow"。
+# 全站开放抓取。
+# /register/ 是合作推广（返佣）确认页：故意不在这里屏蔽，好让搜索引擎能读到页面上的 noindex。
+# 这些页面靠页面里的 noindex,nofollow 与 X-Robots-Tag 响应头排除收录，也不放进 sitemap。
 User-agent: *
 Allow: /
-Disallow: /register/
 
 Sitemap: https://jichangxuncha.blog/sitemap.xml

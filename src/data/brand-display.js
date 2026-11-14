@@ -37,7 +37,7 @@ export const brandDisplay = {
   "firefly": {
     "zh": "萤火虫",
     "en": "FireFly",
-    "advantage": "IPLC、VLESS与原生IP为主要产品特点，不限制客户端和设备数量；提供60—1000 GB月流量及100 GB不限时包。"
+    "advantage": "IPLC、VLESS与原生IP为主要产品特点，资料标注不限设备数量；提供60—1000 GB月流量及100 GB不限时包。"
   },
   "sogo": {
     "zh": "Sogo云",
@@ -47,7 +47,7 @@ export const brandDisplay = {
   "wuyou": {
     "zh": "无忧链接",
     "en": "WorryFree",
-    "advantage": "四平台官方客户端减少配置步骤，资料标注IPLC、全节点1×及不限客户端；提供轻量年付、月流量和不限时包。"
+    "advantage": "四平台官方客户端减少配置步骤，资料标注IPLC、全节点1×，暂不支持第三方客户端；提供轻量年付、月流量和不限时包。"
   },
   "quanqiuyun": {
     "zh": "全球云",

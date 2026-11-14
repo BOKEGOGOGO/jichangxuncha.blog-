@@ -14,6 +14,25 @@ const { post } = Astro.props;
 const brand = additionalBrands.find(b=>b.slug===post.slug);
 const topic = topicOf(post.category);
 const next = posts[(posts.indexOf(post) + 1) % posts.length];
+// 结构化数据：只描述页面上真实存在的内容（标题、摘要、发布与修改日期、所属栏目）
+const site = 'https://jichangxuncha.blog';
+const url = `${site}/posts/${post.slug}/`;
+const crumbHref = topic.slug === 'vps' ? '/category/vps/' : `/category/${topic.slug}/`;
+const graph = { '@context': 'https://schema.org', '@graph': [
+  { '@type': 'Article', '@id': url + '#article', headline: post.title, description: post.description, datePublished: post.date, dateModified: post.updated ?? post.date, inLanguage: 'zh-CN', mainEntityOfPage: url,
+    author: { '@type': 'Organization', name: '机场巡查博客', url: site + '/' }, publisher: { '@type': 'Organization', name: '机场巡查博客', url: site + '/' }, isPartOf: { '@id': site + '/#website' } },
+  { '@type': 'BreadcrumbList', '@id': url + '#breadcrumb', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: '首页', item: site + '/' },
+    { '@type': 'ListItem', position: 2, name: post.category, item: site + crumbHref },
+    { '@type': 'ListItem', position: 3, name: post.title, item: url } ] },
+] };
+// 品牌页底部的延伸阅读：买之前、连上、出问题各一篇，外加回到全部品牌对照
+const brandReading = [
+  ['返回机场推荐：对照全部品牌的套餐与线路', '/category/airports/'],
+  ['机场客户端怎么用：官方客户端六步连上', '/knowledge/client-comparison/'],
+  ['机场月付还是年付？按用量算真实成本', '/knowledge/plan-costs/'],
+  ['机场节点全部超时怎么办？分层排查方法', '/knowledge/node-timeout/'],
+];
 // “看线路：……”这样的段落拆成小标题和正文
 const blocks = post.body.map((t) => {
   const [head, ...rest] = t.split('：');
@@ -21,6 +40,7 @@ const blocks = post.body.map((t) => {
 });
 ---
 <Layout title={post.title} description={post.description}>
+  <script type="application/ld+json" set:html={JSON.stringify(graph).replace(/</g, '\\u003c')}/>
   <div class="bar" id="progress" aria-hidden="true"></div>
   <article class="wrap">
     <header class="page-head">
@@ -42,6 +62,7 @@ const blocks = post.body.map((t) => {
         {post.slug === 'flyv' ? <FlyV/> : post.slug === 'muguang' ? <Muguang/> : post.slug === 'weifeng' ? <Weifeng/> : post.slug === 'feimao' ? <Feimao/> : brand ? <BrandDossier brand={brand}/> : blocks.map((b) => b.head
           ? <section><h2>{b.head}</h2><p>{b.text}</p></section>
           : <p>{b.text}</p>)}
+        {post.category === '机场推荐' && <section><h2>继续阅读</h2>{brandReading.map(([label, href]) => <p><a href={href}>{label} →</a></p>)}</section>}
         {post.slug === 'vps-checklist' && <section><h2>按待确认的问题继续阅读</h2><p><a href="/vps/guides/how-to-choose-vps/">应用资源与配置选择 →</a></p><p><a href="/vps/guides/regions-and-routing/">机房地区与业务依赖 →</a></p><p><a href="/knowledge/vps-maintenance/">维护、安全与恢复清单 →</a></p><p><a href="/vps/guides/vps-vs-airport/">自建VPS与现成服务的责任比较 →</a></p></section>}
       </div>
     </div>
