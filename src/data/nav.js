@@ -57,8 +57,20 @@ export const isCurrent = (path, match) => match.some((m) => path.startsWith(m));
 export const currentGroup = (path) =>
   mainNav.some((n) => !n.mobileOnly && isCurrent(path, n.match)) ? undefined : navGroups.find((g) => isCurrent(path, g.match))?.id;
 
-// 页脚用：所有入口去重后的平铺列表
-export const allLinks = () => {
-  const seen = new Set();
-  return [...mainNav, troubleshoot, ...navGroups.flatMap((g) => g.items)].filter((l) => !seen.has(l.href) && seen.add(l.href));
-};
+// 页脚用：分组精简版，每组只放最常用的几个入口（完整清单在顶栏菜单里）
+const pick = (id, hrefs) => navGroups.find((g) => g.id === id).items.filter((i) => hrefs.includes(i.href));
+export const footerGroups = [
+  { title: '栏目', items: [
+    ...mainNav.filter((n) => !n.mobileOnly),
+    { label: '网络知识库', href: '/knowledge/' },
+    { label: '全部栏目', href: '/category/' },
+  ] },
+  // 页脚列窄，用短名，避免“小火箭 Shadowrocket”折成两行
+  { title: '客户端', items: [
+    { label: '机场客户端怎么用', href: '/knowledge/client-comparison/' },
+    { label: 'Clash', href: '/category/clash/' },
+    { label: '小火箭', href: '/knowledge/shadowrocket/' },
+    { label: 'v2rayN', href: '/knowledge/v2rayn/' },
+  ] },
+  { title: '工具', items: [troubleshoot, ...pick('tools', ['/tools/', '/tools/traffic/', '/search/'])] },
+];

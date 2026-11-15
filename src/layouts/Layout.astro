@@ -6,7 +6,7 @@ import Loader from '../components/Loader.astro';
 import Mark from '../components/Mark.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import {siteInfoPages} from '../data/site-info';
-import { allLinks } from '../data/nav';
+import { footerGroups } from '../data/nav';
 
 const { title = '机场巡查博客', description = '机场推荐、VPS 与订阅使用笔记。', seo = false, canonicalPath, noindex = false } = Astro.props;
 const path = Astro.url.pathname;
@@ -63,13 +63,17 @@ const path = Astro.url.pathname;
     <footer class="foot">
       <div class="wrap foot-in">
         <div class="foot-brand"><Mark size={36}/><p>保持观察，认真记录。</p></div>
-        <div class="foot-col">
-          {allLinks().map((n) => <a href={n.href}>{n.label}</a>)}
-        </div>
-        <div class="foot-col">
+        {footerGroups.map((g) => (
+          <nav class="foot-col" aria-label={g.title}>
+            <span class="mono">{g.title}</span>
+            {g.items.map((n) => <a href={n.href}>{n.label}</a>)}
+          </nav>
+        ))}
+        <nav class="foot-col" aria-label="关于">
+          <span class="mono">关于</span>
           {siteInfoPages.map(p=><a href={'/'+p.slug+'/'}>{p.label}</a>)}
-          <span class="mono">© {new Date().getFullYear()} jichangxuncha.blog</span>
-        </div>
+        </nav>
+        <p class="foot-legal mono">© {new Date().getFullYear()} jichangxuncha.blog · <a href="/rss.xml">RSS</a> · <a href="/sitemap.xml">Sitemap</a></p>
       </div>
     </footer>
     <script>import '../scripts/site.js';</script>
